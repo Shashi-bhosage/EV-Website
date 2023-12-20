@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <title>Electric Vehicle</title>
+    
+</head>
+<body>
+    
+<header class="header">
+
+    <div id="menu-btn" class="fas fa-bars"></div>
+    <a href="#" class="logo"> <span>Electric</span>wheels </a>
+
+    <nav class="navbar">
+
+        <a href="#vehicles">vehicles</a>
+        <a href="#services">services</a>
+        <a href="#featured">featured</a>
+        <a href="#reviews">reviews</a>
+        <a href="#contact">contact</a>
+    </nav>
+
+    <div id="login-btn">
+        <button class="btn">login</button>
+        <i class="far fa-user"></i>
+    </div>
+    <div id="login-btn">
+        <button class="btn">Create Account</button>
+        <i class="far fa-user"></i>
+    </div>
+
+</header> 
+    
+<div class="login-form-container">
+
+    <span id="close-login-form" class="fas fa-times"></span>
+
+    <form action="">
+        <h3>user login</h3>
+        <input type="email" placeholder="email" class="box">
+        <input type="password" placeholder="password" class="box">
+        <p> forget your password <a href="#">click here</a> </p>
+        <input type="submit" value="login" class="btn">
+        <p>or login with</p>
+        <div class="buttons">
+            <a href="#" class="btn"> google </a>
+            <a href="#" class="btn"> facebook </a>
+        </div>
+        <p> don't have an account <a href="#">create one</a> </p>
+    </form>
+
+</div>
+
+<section class="home" id="home">
+
+    <h3 class="home-parallax">find Electric Car</h3>
+
+    <img  class="home-parallax" src="image/electric.png" alt="" class="center">
+
+    <a  href="#" class="btn home-parallax">explore cars</a>
+
+</section>
+<section class="icons-container">
+
+    <div class="icons">
+        <i class="fas fa-home"></i>
+        <div class="content">
+            <h3>150+</h3>
+            <p>branches</p>
+        </div>
+    </div>
+
+    <div class="icons">
+        <i class="fas fa-users"></i>
+        <div class="content">
+            <h3>320+</h3>
+            <p>happy clients</p>
+        </div>
+    </div>
+
+    <div class="icons">
+        <i class="fas fa-car"></i>
+        <div class="content">
+            <h3>1500+</h3>
+            <p>news cars</p>
+        </div>
+    </div>
+
+</section>
+
+<section class="vehicles" id="vehicles">
+
+    <h1 class="heading"> popular <span>vehicles</span> </h1>
+
+    <div class="swiper vehicles-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="image/vehicle-1.png" alt="audi">
+                <div class="content">
+                    <h3>Audi e-tron</h3>
+                    <div class="grid items-center justify-items-center gap-4 text-center">
+                    <div class="text-ev-secondary-turquoise text-2xl font-bold"><svg class="text-ev-secondary-turquoise" width="36" height="36" viewBox="0 0 36 36" fill="none"><g clip-path="url(#clip0_17_228)">
+                    <path d="M11.207 27.31C10.5938 27.31 9.99449 27.4918 9.4847 27.8324C8.97491 28.1731 8.57758 28.6572 8.34294 29.2237C8.10831 29.7901 8.04691 30.4134 8.16652 31.0148C8.28614 31.6161 8.5814 32.1685 9.01494 32.602C9.44848 33.0356 10.0009 33.3308 10.6022 33.4504C11.2035 33.5701 11.8268 33.5087 12.3933 33.274C12.9597 33.0394 13.4439 32.6421 13.7845 32.1323C14.1251 31.6225 14.307 31.0231 14.307 30.41C14.307 30.0029 14.2268 29.5998 14.071 29.2237C13.9152 28.8476 13.6868 28.5058 13.399 28.218C13.1111 27.9301 12.7694 27.7018 12.3933 27.546C12.0172 27.3902 11.6141 27.31 11.207 27.31ZM11.207 32.483C10.7977 32.483 10.3977 32.3617 10.0575 32.1343C9.71724 31.907 9.45206 31.5838 9.29546 31.2058C9.13886 30.8277 9.09789 30.4117 9.17772 30.0104C9.25756 29.609 9.45459 29.2403 9.74395 28.951C10.0333 28.6616 10.402 28.4646 10.8033 28.3848C11.2046 28.3049 11.6207 28.3459 11.9987 28.5025C12.3768 28.6591 12.6999 28.9243 12.9273 29.2645C13.1546 29.6048 13.276 30.0048 13.276 30.414C13.2752 30.9625 13.0569 31.4883 12.6691 31.8761C12.2812 32.264 11.7554 32.4822 11.207 32.483ZM25.483 27.31C24.8698 27.31 24.2705 27.4918 23.7607 27.8324C23.2509 28.1731 22.8536 28.6572 22.6189 29.2237C22.3843 29.7901 22.3229 30.4134 22.4425 31.0148C22.5621 31.6161 22.8574 32.1685 23.2909 32.602C23.7245 33.0356 24.2769 33.3308 24.8782 33.4504C25.4795 33.5701 26.1028 33.5087 26.6693 33.274C27.2357 33.0394 27.7199 32.6421 28.0605 32.1323C28.4011 31.6225 28.583 31.0231 28.583 30.41C28.583 29.5878 28.2563 28.7993 27.675 28.218C27.0936 27.6366 26.3051 27.31 25.483 27.31ZM25.483 32.483C25.0737 32.483 24.6737 32.3617 24.3335 32.1343C23.9932 31.907 23.7281 31.5838 23.5715 31.2058C23.4149 30.8277 23.3739 30.4117 23.4537 30.0104C23.5336 29.609 23.7306 29.2403 24.0199 28.951C24.3093 28.6616 24.678 28.4646 25.0793 28.3848C25.4806 28.3049 25.8967 28.3459 26.2747 28.5025C26.6528 28.6591 26.9759 28.9243 27.2033 29.2645C27.4306 29.6048 27.552 30.0048 27.552 30.414C27.5512 30.9625 27.3329 31.4883 26.9451 31.8761C26.5572 32.264 26.0314 32.4822 25.483 32.483ZM10.583 12.95C10.0919 12.95 9.61181 13.0956 9.20348 13.3685C8.79515 13.6413 8.47689 14.0291 8.28896 14.4828C8.10103 14.9365 8.05186 15.4357 8.14766 15.9174C8.24347 16.3991 8.47994 16.8415 8.8272 17.1888C9.17445 17.536 9.61691 17.7725 10.0986 17.8683C10.5802 17.9641 11.0795 17.9149 11.5332 17.727C11.9869 17.5391 12.3747 17.2208 12.6475 16.8125C12.9203 16.4042 13.066 15.9241 13.066 15.433C13.0662 14.7749 12.8051 14.1436 12.34 13.678C11.875 13.2124 11.2441 12.9505 10.586 12.95H10.583ZM10.583 16.674C10.3375 16.674 10.0976 16.6012 9.89348 16.4649C9.6894 16.3285 9.53035 16.1347 9.43642 15.9079C9.34249 15.6812 9.31792 15.4316 9.3658 15.1909C9.41369 14.9502 9.53188 14.729 9.70543 14.5555C9.87899 14.3819 10.1001 14.2637 10.3408 14.2159C10.5816 14.168 10.8311 14.1925 11.0579 14.2865C11.2846 14.3804 11.4785 14.5394 11.6148 14.7435C11.7512 14.9476 11.824 15.1876 11.824 15.433C11.8234 15.7615 11.6929 16.0764 11.461 16.3089C11.229 16.5414 10.9144 16.6727 10.586 16.674H10.583ZM22.997 15.433C22.997 15.9241 23.1426 16.4042 23.4154 16.8125C23.6883 17.2208 24.076 17.5391 24.5297 17.727C24.9835 17.9149 25.4827 17.9641 25.9644 17.8683C26.446 17.7725 26.8885 17.536 27.2357 17.1888C27.583 16.8415 27.8194 16.3991 27.9152 15.9174C28.011 15.4357 27.9619 14.9365 27.7739 14.4828C27.586 14.0291 27.2678 13.6413 26.8594 13.3685C26.4511 13.0956 25.9711 12.95 25.48 12.95C24.822 12.9508 24.1912 13.2127 23.7262 13.6783C23.2612 14.1439 23 14.775 23 15.433H22.997ZM26.721 15.433C26.721 15.6784 26.6482 15.9184 26.5118 16.1225C26.3754 16.3265 26.1816 16.4856 25.9549 16.5795C25.7281 16.6735 25.4786 16.698 25.2378 16.6502C24.9971 16.6023 24.776 16.4841 24.6024 16.3105C24.4289 16.137 24.3107 15.9158 24.2628 15.6751C24.2149 15.4344 24.2395 15.1848 24.3334 14.9581C24.4274 14.7313 24.5864 14.5375 24.7905 14.4012C24.9946 14.2648 25.2345 14.192 25.48 14.192C25.8095 14.1917 26.1256 14.3223 26.3588 14.555C26.5921 14.7877 26.7234 15.1035 26.724 15.433H26.721ZM21.756 18.533C21.756 17.7965 21.5375 17.0765 21.1283 16.4641C20.7191 15.8516 20.1376 15.3743 19.4571 15.0925C18.7766 14.8106 18.0278 14.7369 17.3054 14.8806C16.5831 15.0242 15.9195 15.3789 15.3987 15.8997C14.8779 16.4205 14.5232 17.0841 14.3795 17.8065C14.2358 18.5289 14.3096 19.2776 14.5914 19.9581C14.8733 20.6386 15.3506 21.2202 15.963 21.6294C16.5754 22.0386 17.2954 22.257 18.032 22.257C18.521 22.2574 19.0053 22.1615 19.4573 21.9747C19.9093 21.7879 20.32 21.5139 20.6661 21.1684C21.0122 20.8229 21.2868 20.4126 21.4743 19.9609C21.6618 19.5092 21.7586 19.025 21.759 18.536L21.756 18.533ZM15.549 18.533C15.549 18.0419 15.6946 17.5618 15.9674 17.1535C16.2403 16.7452 16.628 16.4269 17.0817 16.239C17.5355 16.0511 18.0347 16.0019 18.5164 16.0977C18.998 16.1935 19.4405 16.43 19.7877 16.7773C20.135 17.1245 20.3714 17.5669 20.4672 18.0486C20.563 18.5302 20.5139 19.0295 20.3259 19.4832C20.138 19.9369 19.8198 20.3247 19.4114 20.5975C19.0031 20.8704 18.5231 21.016 18.032 21.016C17.3746 21.0147 16.7446 20.753 16.2798 20.2882C15.815 19.8234 15.5533 19.1933 15.552 18.536L15.549 18.533ZM22.997 11.705C23.7335 11.705 24.4535 11.4866 25.0659 11.0774C25.6783 10.6682 26.1556 10.0866 26.4375 9.40611C26.7193 8.72564 26.7931 7.97687 26.6494 7.25449C26.5057 6.5321 26.151 5.86854 25.6302 5.34773C25.1094 4.82692 24.4459 4.47224 23.7235 4.32855C23.0011 4.18486 22.2523 4.25861 21.5719 4.54047C20.8914 4.82233 20.3098 5.29965 19.9006 5.91206C19.4914 6.52447 19.273 7.24447 19.273 7.981C19.2726 8.4706 19.3687 8.95547 19.5558 9.40788C19.743 9.8603 20.0175 10.2714 20.3636 10.6176C20.7098 10.9639 21.1208 11.2385 21.5732 11.4257C22.0255 11.613 22.5104 11.7093 23 11.709L22.997 11.705ZM22.997 5.498C23.4881 5.498 23.9681 5.64362 24.3765 5.91646C24.7848 6.18929 25.103 6.57708 25.2909 7.03079C25.4789 7.4845 25.528 7.98375 25.4322 8.46541C25.3364 8.94706 25.1 9.38949 24.7527 9.73674C24.4055 10.084 23.963 10.3205 23.4814 10.4163C22.9997 10.5121 22.5005 10.4629 22.0467 10.275C21.593 10.0871 21.2053 9.7688 20.9324 9.36047C20.6596 8.95215 20.514 8.47209 20.514 7.981C20.515 7.32246 20.7774 6.69127 21.2435 6.22607C21.7097 5.76088 22.3414 5.49973 23 5.5L22.997 5.498ZM16.79 7.981C16.79 7.24447 16.5715 6.52447 16.1623 5.91206C15.7531 5.29965 15.1715 4.82233 14.4911 4.54047C13.8106 4.25861 13.0618 4.18486 12.3394 4.32855C11.617 4.47224 10.9535 4.82692 10.4327 5.34773C9.91189 5.86854 9.55719 6.5321 9.4135 7.25449C9.26981 7.97687 9.34355 8.72564 9.62542 9.40611C9.90728 10.0866 10.3846 10.6682 10.997 11.0774C11.6094 11.4866 12.3294 11.705 13.066 11.705C14.0535 11.7058 15.0008 11.3144 15.6998 10.6167C16.3987 9.91914 16.7919 8.97249 16.793 7.985L16.79 7.981ZM13.066 10.464C12.5749 10.464 12.0948 10.3184 11.6865 10.0455C11.2782 9.7727 10.9599 9.38491 10.772 8.9312C10.584 8.47749 10.5349 7.97825 10.6307 7.4966C10.7265 7.01494 10.9629 6.5725 11.3102 6.22525C11.6575 5.878 12.0999 5.64152 12.5816 5.54572C13.0632 5.44991 13.5625 5.49908 14.0162 5.68701C14.4699 5.87494 14.8577 6.19319 15.1305 6.60152C15.4033 7.00984 15.549 7.48991 15.549 7.981C15.549 8.63929 15.2879 9.27071 14.823 9.73676C14.358 10.2028 13.7272 10.4654 13.069 10.467L13.066 10.464ZM25.48 24.824H23.556C26.242 23.5673 28.4192 21.4323 29.7282 18.7713C31.0373 16.1104 31.3999 13.0827 30.7562 10.1879C30.1124 7.29312 28.5009 4.70437 26.1876 2.84895C23.8743 0.993533 20.9974 -0.0176392 18.032 -0.0176392C15.0665 -0.0176392 12.1896 0.993533 9.8763 2.84895C7.56297 4.70437 5.95146 7.29312 5.30776 10.1879C4.66405 13.0827 5.02665 16.1104 6.33568 18.7713C7.64472 21.4323 9.82193 23.5673 12.508 24.824H10.584C9.10247 24.824 7.68163 25.4125 6.63405 26.4601C5.58647 27.5077 4.99794 28.9285 4.99794 30.41C4.99794 31.8915 5.58647 33.3123 6.63405 34.3599C7.68163 35.4075 9.10247 35.996 10.584 35.996H25.484C26.9655 35.996 28.3863 35.4075 29.4339 34.3599C30.4814 33.3123 31.07 31.8915 31.07 30.41C31.07 28.9285 30.4814 27.5077 29.4339 26.4601C28.3863 25.4125 26.9655 24.824 25.484 24.824H25.48ZM6.23897 13.031C6.23897 10.6986 6.9306 8.41851 8.22643 6.47916C9.52226 4.53981 11.3641 3.02827 13.519 2.13568C15.6739 1.2431 18.045 1.00956 20.3327 1.4646C22.6203 1.91964 24.7216 3.04281 26.3709 4.69209C28.0201 6.34137 29.1433 8.44268 29.5983 10.7303C30.0534 13.0179 29.8198 15.3891 28.9273 17.544C28.0347 19.6989 26.5231 21.5407 24.5838 22.8365C22.6444 24.1323 20.3644 24.824 18.032 24.824C14.9064 24.8198 11.9101 23.5764 9.69985 21.3665C7.48958 19.1566 6.24572 16.1605 6.24095 13.035L6.23897 13.031ZM25.48 34.755H10.5799C9.42758 34.755 8.32243 34.2972 7.50759 33.4824C6.69274 32.6675 6.23494 31.5624 6.23494 30.41C6.23494 29.2576 6.69274 28.1525 7.50759 27.3376C8.32243 26.5228 9.42758 26.065 10.5799 26.065H25.48C26.6323 26.065 27.7375 26.5228 28.5523 27.3376C29.3672 28.1525 29.825 29.2576 29.825 30.41C29.825 31.5624 29.3672 32.6675 28.5523 33.4824C27.7375 34.2972 26.6323 34.755 25.48 34.755Z" fill="currentColor"></path></g><defs><clipPath id="clip0_17_228"><rect width="36" height="36" fill="white"></rect></clipPath></defs></svg></div><div class="text-ev-secondary-gray text-sm">CCS<!-- --> Connector</div></div>
+                    <div class="price"> <span>price : </span> $62,000/- </div>
+                    <p>
+                        new
+                        <span class="fas fa-circle"></span> 2021
+                        <span class="fas fa-circle"></span> automatic
+                        <span class="fas fa-circle"></span> electric
+                        <span class="fas fa-circle"></span> 183mph
+                    </p>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/vehicle-2.png" alt="">
+                <div class="content">
+                    <h3>new model</h3>
+                    <div class="price"> <span>price : </span> $1,62,000/- </div>
+                    <p>
+                        new
+                        <span class="fas fa-circle"></span> 2023
+                        <span class="fas fa-circle"></span>semi-automatic
+                        <span class="fas fa-circle"></span> electric
+                        <span class="fas fa-circle"></span> 183mph
+                    </p>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/vehicle-3.png" alt="">
+                <div class="content">
+                    <h3>new model</h3>
+                    <div class="price"> <span>price : </span> $62,000/- </div>
+                    <p>
+                        new
+                        <span class="fas fa-circle"></span> 2021
+                        <span class="fas fa-circle"></span> automatic
+                        <span class="fas fa-circle"></span> petrol
+                        <span class="fas fa-circle"></span> 183mph
+                    </p>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/vehicle-4.png" alt="">
+                <div class="content">
+                    <h3>new model</h3>
+                    <div class="price"> <span>price : </span> $62,000/- </div>
+                    <p>
+                        new
+                        <span class="fas fa-circle"></span> 2021
+                        <span class="fas fa-circle"></span> automatic
+                        <span class="fas fa-circle"></span> petrol
+                        <span class="fas fa-circle"></span> 183mph
+                    </p>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/vehicle-5.png" alt="">
+                <div class="content">
+                    <h3>new model</h3>
+                    <div class="price"> <span>price : </span> $62,000/- </div>
+                    <p>
+                        new
+                        <span class="fas fa-circle"></span> 2021
+                        <span class="fas fa-circle"></span> automatic
+                        <span class="fas fa-circle"></span> petrol
+                        <span class="fas fa-circle"></span> 183mph
+                    </p>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/vehicle-6.png" alt="">
+                <div class="content">
+                    <h3>new model</h3>
+                    <div class="price"> <span>price : </span> $62,000/- </div>
+                    <p>
+                        new
+                        <span class="fas fa-circle"></span> 2021
+                        <span class="fas fa-circle"></span> automatic
+                        <span class="fas fa-circle"></span> petrol
+                        <span class="fas fa-circle"></span> 183mph
+                    </p>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="swiper-pagination"></div>
+
+    </div>
+
+</section>
+
+<section class="services" id="services">
+
+    <h1 class="heading"> our <span>services</span> </h1>
+
+    <div class="box-container">
+
+        <div class="box">
+            <i class="fas fa-car"></i>
+            <h3>car selling</h3>
+        </div>
+
+        <div class="box">
+            <i class="fas fa-tools"></i>
+            <h3>parts repair</h3>
+
+        </div>
+
+        <div class="box">
+            <i class="fas fa-car-crash"></i>
+            <h3>car insurance</h3>
+        </div>
+
+        <div class="box">
+            <i class="fas fa-car-battery"></i>
+            <h3>battery replacement</h3>
+        </div>
+
+        <div class="box">
+            <i class="fas fa-gas-pump"></i>
+            <h3>oil change</h3>
+        </div>
+
+        <div class="box">
+            <i class="fas fa-headset"></i>
+            <h3>24/7 support</h3>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="featured" id="featured">
+
+    <h1 class="heading"> <span>featured</span> cars </h1>
+
+    <div class="swiper featured-slider">
+
+       <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="image/i-1.png" alt="" width="70%" height="70%">
+                <div class="content">
+                    <h3>BMW i7</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="price"><span>&#8377;</span>  1.95 Cr*</div>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/i-2.png" alt="" width="70%" height="70%">
+                <div class="content">
+                    <h3>Hyundai Kona Electric</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="price"><span>&#8377;</span>  23.84 - 24.03 Lakh*</div>
+                    <a href="#" class="btn">check out</a>
+                    
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/i-3.png" alt="">
+                <div class="content">
+                    <h3>Audi e-tron GT</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="price"><span>&#8377;</span>1.70 Cr*</div>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/i-4.png" alt="">
+                <div class="content">
+                    <h3>BYD Atto 3</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="price"><span>&#8377;</span>33.99 - 34.49 Lakh*</div>
+                    <a href="#" class="btn">check out</a>
+                </div>
+            </div>
+
+       </div>
+
+       <div class="swiper-pagination"></div>
+
+    </div>
+
+    <div class="swiper featured-slider">
+
+        <div class="swiper-wrapper">
+ 
+             <div class="swiper-slide box">
+                 <img src="image/i-5.png" alt="">
+                 <div class="content">
+                     <h3>Hyundai Ioniq 5</h3>
+                     <div class="stars">
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star-half-alt"></i>
+                     </div>
+                     <div class="price"><span>&#8377;</span>45.95 Lakh*</div>
+                     <a href="#" class="btn">check out</a>
+                 </div>
+             </div>
+ 
+             <div class="swiper-slide box">
+                 <img src="image/i-6.png" alt="">
+                 <div class="content">
+                     <h3>Toyota  Cruiser Hyryder</h3>
+                     <div class="stars">
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star-half-alt"></i>
+                     </div>
+                     <div class="price"><span>&#8377;</span>10.48 Lakh*</div>
+                     <a href="#" class="btn">check out</a>
+                 </div>
+             </div>
+ 
+             <div class="swiper-slide box">
+                 <img src="image/i-7.png" alt="">
+                 <div class="content">
+                     <h3>Mercedes-Benz </h3>
+                     <div class="stars">
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star-half-alt"></i>
+                     </div>
+                     <div class="price"><span>&#8377;</span>2.69 Cr*</div>
+                     <a href="#" class="btn">check out</a>
+                 </div>
+             </div>
+ 
+             <div class="swiper-slide box">
+                 <img src="image/i-8.png" alt="">
+                 <div class="content">
+                     <h3>Lexus ES</h3>
+                     <div class="stars">
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star"></i>
+                         <i class="fas fa-star-half-alt"></i>
+                     </div>
+                     <div class="price"><span>&#8377;</span>61.60 Lakh*</div>
+                     <a href="#" class="btn">check out</a>
+                 </div>
+             </div>
+ 
+        </div>
+ 
+        <div class="swiper-pagination"></div>
+ 
+     </div>
+
+</section>
+
+<section class="newsletter">
+    
+    <h3>subscribe for latest updates</h3
+
+   <form action=" ">
+        <input type="email" placeholder="enter your email">
+        <input type="submit" value="subscribe">
+   </form>
+
+</section>
+
+<section class="reviews" id="reviews">
+
+    <h1 class="heading"> client's <span>review</span> </h1>
+
+    <div class="swiper review-slider">
+
+        <div class="swiper-wrapper">
+
+            <div class="swiper-slide box">
+                <img src="image/pic-1.png" alt="">
+                <div class="content">
+                    <p>Electric Vehicles (EVs) is the modern vehicle technology with a rapid development which will alleviate the problems of energy, air pollution and global warming that are becoming more severe.</p>
+                    <h3>kishan</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-2.png" alt="">
+                <div class="content">
+                    <p>They provide best service.my review is 5 out of 5.</p>
+                    <h3>ankita</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-3.png" alt="">
+                <div class="content">
+                    <p>An easy purchase, immaculate car and very friendly and helpful staff. Would highly recommend.</p>
+                    <h3>shruti</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-4.png" alt="">
+                <div class="content">
+                    <p>An easy purchase, immaculate car and very friendly and helpful staff. Would highly recommend.</p>
+                    <h3>john deo</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-5.png" alt="">
+                <div class="content">
+                    <p>Great company to deal with - very professional - car exactly as described - highly recommended.</p>
+                    <h3>john deo</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper-slide box">
+                <img src="image/pic-6.png" alt="">
+                <div class="content">
+                    <p>Great Team to deal with and quick sale at my desired price. Would definitely use them again.</p>
+                    <h3>kiara</h3>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="swiper-pagination"></div>
+
+    </div>
+
+</section>
+
+<section class="contact" id="contact">
+
+    <h1 class="heading"><span>contact</span> us</h1>
+
+    <div class="row">
+
+        <iframe src="https://www.google.com/maps/d/embed?mid=1G7tZ7yPDNtzUabFGRSjXThjwSH0&hl=en&ehbc=2E312F" width="500" height="400"></iframe>
+        <form action="">
+            <h3>get in touch</h3>
+            <input type="text" placeholder="your name" class="box">
+            <input type="email" placeholder="your email" class="box">
+            <input type="tel" placeholder="subject" class="box">
+            <textarea placeholder="your message" class="box" cols="30" rows="10"></textarea>
+            <input type="submit" value="send message" class="btn">
+        </form>
+
+    </div>
+
+</section>
+
+<section class="footer" id="footer">
+
+    <div class="box-container">
+
+        <div class="box">
+            <h3>our branches</h3>
+            <a href="#"> <i class="fas fa-map-marker-alt"></i> india </a>
+            <a href="#"> <i class="fas fa-map-marker-alt"></i> japan </a>
+            <a href="#"> <i class="fas fa-map-marker-alt"></i> france </a>
+            <a href="#"> <i class="fas fa-map-marker-alt"></i> russia </a>
+            <a href="#"> <i class="fas fa-map-marker-alt"></i> USA </a>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <a href="#"> <i class="fas fa-phone"></i> +91 9834600863 </a>
+            
+            <a href="#"> <i class="fas fa-envelope"></i> bhosagesachin4@gmail.com </a>
+            <a href="#"> <i class="fas fa-map-marker-alt"></i> solapur, india - 413002 </a>
+        </div>
+
+        <div class="box">
+            <h3>contact info</h3>
+            <a href="#"> <i class="fab fa-facebook-f"></i> facebook </a>
+            <a href="#"> <i class="fab fa-twitter"></i> twitter </a>
+            <a href="https://www.instagram.com/shashi_bhosage?igshid=NGVhN2U2NjQ0Yg=="> <i class="fab fa-instagram"></i> instagram </a>
+            <a href="#"> <i class="fab fa-linkedin"></i> linkedin </a>
+    
+        </div>
+
+    </div>
+
+    <div class="credit"> created by Shashi Bhosage|&copy; all rights reserved 2023</div>
+
+</section>
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<script src="js/script.js"></script>
+
+</body>
+</html>

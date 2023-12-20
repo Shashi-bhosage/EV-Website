@@ -1,0 +1,4084 @@
+//if (top.location!= self.location) {
+//    top.location = self.location.href
+//}
+
+function get_clear_domain() {
+    d = document.domain;
+    if (d.indexOf('www.')>=0) {
+        return d.substring(4);
+    }
+    return d;
+}
+
+function getCookie(name, is_json) {
+    var cookie = " " + document.cookie;
+    var search = " " + name + "=";
+    var setStr = null;
+    var offset = 0;
+    var end = 0;
+    if (cookie.length > 0) {
+        offset = cookie.indexOf(search);
+        if (offset != -1) {
+            offset += search.length;
+            end = cookie.indexOf(";", offset);
+            if (end == -1) {
+                end = cookie.length;
+            }
+            setStr = unescape(cookie.substring(offset, end));
+        }
+        if (is_json) {
+            var data = unescape(setStr);
+            try {
+                var obj = JSON && JSON.parse(data) || $.parseJSON(data);
+            } catch (e) {
+                return null;
+            }
+            if (typeof(obj)!='object') {
+                return null;
+            }
+            return obj;
+        }
+    }
+    return(setStr);
+}
+
+function setCookie(name, value, is_json) {
+    var d = new Date();
+    var nd = new Date();
+    nd.setDate(d.getDate()+1000);
+    expires = nd.toUTCString();
+    if (is_json) {
+        value = escape(JSON.stringify(value));
+    }
+    document.cookie = name + "=" + (value) +
+        ((expires) ? "; expires=" + expires : "") +
+        "; domain=." + get_clear_domain()+'; path=/;';
+}
+
+var get_current_slide_id = function() {
+    return document.location.toString().replace(/^.*slide\/(\d+)\/?.*$/, '$1');
+};
+
+
+function loadScript(url, callback)
+{
+    var head;
+    if (typeof(document.getElementsByTagName)!='undefined' && document.getElementsByTagName('head') && document.getElementsByTagName('head')[0]) {
+        head = document.getElementsByTagName('head')[0];
+    } else {
+        if (typeof(setTimeout)=='undefined') {
+            window.onerror("setTimeout is undefined on function loadScript", '[system]');
+            callback(2, url);
+            return;
+        }
+        setTimeout(function() {
+            loadScript(url, callback);
+        }, 100);
+        return;
+    }
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+    if (typeof(callback)!='undefined' && typeof(script.onload)!='undefined') {
+        script.onload = function() {
+            callback(0, url);
+        };
+    }
+    if (typeof(script.async)!='undefined') {
+        script.async = true;
+    }
+    if (typeof(callback)!='undefined' && typeof(script.onerror)!='undefined') {
+        script.onerror = function(){
+            callback(1, url);
+        };
+    }
+    head.appendChild(script);
+}
+
+//function loadScript(url, callback)
+//{
+//    // adding the script tag to the head as suggested before
+//    var head = document.getElementsByTagName('head')[0];
+//    var script = document.createElement('script');
+//    script.type = 'text/javascript';
+//    script.src = url;
+//    script.async = true;
+//    // then bind the event to the callback function
+//    // there are several events for cross browser compatibility
+//    script.onreadystatechange = callback;
+//    script.onload = callback;
+//
+//    // fire the loading
+//    head.appendChild(script);
+//}
+
+function get_lang_letter_code() {
+    switch (document.domain.toString().replace(/^[^\.]+\./, '')) {
+        case 'com.br' : return 'pt';
+        case 'biz.tr' : return 'tr';
+        case 'in.th' : return 'th';
+    }
+    return document.domain.toString().replace(/^[^\.]+\./, '');
+}
+
+var get_facebook_lang_js = function() {
+    switch (get_lang_letter_code()) {
+        // window.___gcfg = {lang:}; - for google
+        case 'us' : window.___gcfg = {lang: 'us'}; return 'en_US';
+        case 'de' : window.___gcfg = {lang: 'de'}; return 'de_DE';
+        case 'it' : window.___gcfg = {lang: 'it'}; return 'it_IT';
+        case 'fr' : window.___gcfg = {lang: 'fr'}; return 'fr_FR';
+        case 'pl' : window.___gcfg = {lang: 'pl'}; return 'pl_PL';
+        case 'pt' : window.___gcfg = {lang: 'pt-BR'}; return 'pt_BR';
+        case 'es' : window.___gcfg = {lang: 'es'}; return 'es_ES';
+        case 'ru' : window.___gcfg = {lang: 'ru'}; return 'ru_RU';
+        case 'id' : window.___gcfg = {lang: 'id'}; return 'id_ID';
+        case 'cz' : window.___gcfg = {lang: 'cs'}; return 'cs_CZ';
+        case 'hu' : window.___gcfg = {lang: 'hu'}; return 'hu_HU';
+        case 'fi' : window.___gcfg = {lang: 'fi'}; return 'fi_FI';
+        case 'se' : window.___gcfg = {lang: 'sv'}; return 'sv_SE';
+        case 'th' : window.___gcfg = {lang: 'th'}; return 'th_TH';
+        case 'nl' : window.___gcfg = {lang: 'nl'}; return 'nl_NL';
+        case 'tr' : window.___gcfg = {lang: 'tr'}; return 'tr_TR';
+        case 'no' : window.___gcfg = {lang: 'no'}; return 'nb_NO';
+        case 'dk' : window.___gcfg = {lang: 'da'}; return 'da_DK';
+        case 'gr' : window.___gcfg = {lang: 'el'}; return 'el_GR';
+    }
+};
+
+var get_google_search_script = function() {
+    var domain = document.location.host;
+    switch (domain) {
+        case "slideplayer.com":
+            return '014946123526009153014:ssdtppl0-v4';
+            break;
+        case "slideplayer.org":
+            return '014946123526009153014:xo6lxdyn_2m';
+            break;
+        case "slideplayer.it":
+            return '014946123526009153014:urth7vz-bx0';
+            break;
+        case "slideplayer.fr":
+            return '014946123526009153014:qiqqpbszk8m';
+            break;
+        case "slideplayer.pl":
+            return '014946123526009153014:ejpzmlu8xmc';
+            break;
+        case "slideplayer.com.br":
+            return '014946123526009153014:mjkju6f9tnm';
+            break;
+        case "slideplayer.es":
+            return '014946123526009153014:napqkfaq0e0';
+            break;
+        case "slideplayer.info":
+            return '014946123526009153014:naanydeei5i';
+            break;
+        case "slideplayer.cz":
+            return '014946123526009153014:9twisfxksdy';
+            break;
+        case "slideplayer.hu":
+            return '014946123526009153014:p4gurxrqkao';
+            break;
+        case "slideplayer.biz":
+            return '014946123526009153014:rcdsvo-tvcc';
+            break;
+        case "slideplayer.se":
+            return '014946123526009153014:f9w768p8xck';
+            break;
+        case "slideplayer.in.th":
+            return '014946123526009153014:qgy4lxrp4zy';
+            break;
+        case "slideplayer.nl":
+            return '014946123526009153014:tlev2d5oo34';
+            break;
+        case "slideplayer.biz.tr":
+            return '014946123526009153014:1cb0pguz568';
+            break;
+        case "slideplayer.no":
+            return '014946123526009153014:w03-efsdvtw';
+            break;
+        case "slideplayer.dk":
+            return '014946123526009153014:gsi-0uuegbc';
+            break;
+        case "slideplayer.gr":
+            return '014946123526009153014:getiqgg6bzs';
+            break;
+        default :
+            return '014946123526009153014:ssdtppl0-v4';
+    }
+};
+
+var uploadRecapCallback = function () {
+    if (slideplayer.lib.uploadZone) {
+        slideplayer.lib.uploadZone.options.autoProcessQueue=true;
+        slideplayer.lib.uploadZone.processQueue();
+    }
+}
+var setUploadRecap = function() {
+    var modal_recap_id = 0;
+    if ($("#upload_recaptcha iframe").length < 1) {
+        modal_recap_id = grecaptcha.render($('#upload_recaptcha')[0], {'sitekey': sldplr_recaptcha_sitekey});
+    }
+    $('#upload_recaptcha').attr('recap_id', modal_recap_id)
+};
+var setAuthModalRecap = function() {
+    var modal_recap_id = 0;
+    if ($("#auth_recaptcha iframe").length < 1) {
+        modal_recap_id = grecaptcha.render($('#auth_recaptcha')[0], {'sitekey': sldplr_recaptcha_sitekey});
+    }
+    $('#auth_recaptcha').attr('recap_id', modal_recap_id)
+};
+
+var setLoginRecap = function() {
+    var recap_id = 0;
+    if ($('#login_recap iframe').length < 1) {
+        recap_id = grecaptcha.render($('#login_recap')[0], {'sitekey': sldplr_recaptcha_sitekey});
+    }
+    $('#login_recap').attr('recap_id', recap_id)
+};
+var setRegRecap = function() {
+    var recap_id = 0;
+    if ($('#reg_recap iframe').length < 1) {
+        recap_id = grecaptcha.render($('#reg_recap')[0], {'sitekey': sldplr_recaptcha_sitekey});
+    }
+    $('#reg_recap').attr('recap_id', recap_id)
+};
+
+
+var setRestoreRecap = function() {
+    var recap_id = 0;
+    if ($('#restore_recap iframe').length < 1) {
+        recap_id = grecaptcha.render($('#restore_recap')[0], {'sitekey': sldplr_recaptcha_sitekey});
+    }
+    $('#restore_recap').attr('recap_id', recap_id)
+};
+
+var setSendAbuseRecap = function() {
+    var recap_id = 0;
+    if ($('#send_abuse_recap iframe').length < 1) {
+        recap_id = grecaptcha.render($('#send_abuse_recap')[0], {'sitekey': sldplr_recaptcha_sitekey});
+    }
+    $('#send_abuse_recap').attr('recap_id', recap_id)
+};
+
+var setNewMsgRecap = function() {
+    var recap_id = 0;
+    if ($('#new_msg_recap .g-recaptcha iframe').length < 1) {
+        recap_id = grecaptcha.render($('#new_msg_recap')[0], {'sitekey': sldplr_recaptcha_sitekey});
+    }
+    $('#new_msg_recap').attr('recap_id', recap_id);
+};
+
+var setDownloadRecap = function() {
+    var recap_id = 0,
+        recap = $('#download_recaptcha');
+    if (recap.find('iframe').length < 1) {
+        recap_id = grecaptcha.render(recap[0],{'sitekey' : sldplr_recaptcha_sitekey});
+    }
+    recap.attr('recap_id', recap_id);
+};
+
+var waitForFinalEvent = (function() {
+    var timers = {};
+    return function(callback, ms, uniqueId) {
+        if (!uniqueId) {
+            uniqueId = "Don't call this twice without a uniqueId";
+        }
+        if (timers[uniqueId]) {
+            clearTimeout(timers[uniqueId]);
+        }
+        timers[uniqueId] = setTimeout(callback, ms);
+    };
+})();
+/* ========================================================================
+ * Bootstrap: modal.js v3.3.6
+ * http://getbootstrap.com/javascript/#modals
+ * ========================================================================
+ * Copyright 2011-2015 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+var load_lib_modals = function(){
+    +function ($) {
+        'use strict';
+
+        // MODAL CLASS DEFINITION
+        // ======================
+
+        var Modal = function (element, options) {
+            this.options             = options
+            this.$body               = $(document.body)
+            this.$element            = $(element)
+            this.$dialog             = this.$element.find('.modal-dialog')
+            this.$backdrop           = null
+            this.isShown             = null
+            this.originalBodyPad     = null
+            this.scrollbarWidth      = 0
+            this.ignoreBackdropClick = false
+
+            if (this.options.remote) {
+                this.$element
+                    .find('.modal-content')
+                    .load(this.options.remote, $.proxy(function () {
+                        this.$element.trigger('loaded.bs.modal')
+                    }, this))
+            }
+        }
+
+        Modal.VERSION  = '3.3.6'
+
+        Modal.TRANSITION_DURATION = 300
+        Modal.BACKDROP_TRANSITION_DURATION = 150
+
+        Modal.DEFAULTS = {
+            backdrop: true,
+            keyboard: true,
+            show: true
+        }
+
+        Modal.prototype.toggle = function (_relatedTarget) {
+            return this.isShown ? this.hide() : this.show(_relatedTarget)
+        }
+
+        Modal.prototype.show = function (_relatedTarget) {
+            var that = this
+            var e    = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
+
+            this.$element.trigger(e)
+
+            if (this.isShown || e.isDefaultPrevented()) return
+
+            this.isShown = true
+
+            this.checkScrollbar()
+            this.setScrollbar()
+            this.$body.addClass('modal-open')
+
+            this.escape()
+            this.resize()
+
+            this.$element.on('click.dismiss.bs.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this))
+
+            this.$dialog.on('mousedown.dismiss.bs.modal', function () {
+                that.$element.one('mouseup.dismiss.bs.modal', function (e) {
+                    if ($(e.target).is(that.$element)) that.ignoreBackdropClick = true
+                })
+            })
+
+            this.backdrop(function () {
+                var transition = $.support.transition && that.$element.hasClass('fade')
+
+                if (!that.$element.parent().length) {
+                    that.$element.appendTo(that.$body) // don't move modals dom position
+                }
+
+                that.$element
+                    .show()
+                    .scrollTop(0)
+
+                that.adjustDialog()
+
+                if (transition) {
+                    that.$element[0].offsetWidth // force reflow
+                }
+
+                that.$element.addClass('in')
+
+                that.enforceFocus()
+
+                var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget })
+
+                transition ?
+                    that.$dialog // wait for modal to slide in
+                        .one('bsTransitionEnd', function () {
+                            that.$element.trigger('focus').trigger(e)
+                        })
+                        .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
+                    that.$element.trigger('focus').trigger(e)
+            })
+        }
+
+        Modal.prototype.hide = function (e) {
+            if (e) e.preventDefault()
+
+            e = $.Event('hide.bs.modal')
+
+            this.$element.trigger(e)
+
+            if (!this.isShown || e.isDefaultPrevented()) return
+
+            this.isShown = false
+
+            this.escape()
+            this.resize()
+
+            $(document).off('focusin.bs.modal')
+
+            this.$element
+                .removeClass('in')
+                .off('click.dismiss.bs.modal')
+                .off('mouseup.dismiss.bs.modal')
+
+            this.$dialog.off('mousedown.dismiss.bs.modal')
+
+            $.support.transition && this.$element.hasClass('fade') ?
+                this.$element
+                    .one('bsTransitionEnd', $.proxy(this.hideModal, this))
+                    .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
+                this.hideModal()
+        }
+
+        Modal.prototype.enforceFocus = function () {
+            $(document)
+                .off('focusin.bs.modal') // guard against infinite focus loop
+                .on('focusin.bs.modal', $.proxy(function (e) {
+                    if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
+                        this.$element.trigger('focus')
+                    }
+                }, this))
+        }
+
+        Modal.prototype.escape = function () {
+            if (this.isShown && this.options.keyboard) {
+                this.$element.on('keydown.dismiss.bs.modal', $.proxy(function (e) {
+                    e.which == 27 && this.hide()
+                }, this))
+            } else if (!this.isShown) {
+                this.$element.off('keydown.dismiss.bs.modal')
+            }
+        }
+
+        Modal.prototype.resize = function () {
+            if (this.isShown) {
+                $(window).on('resize.bs.modal', $.proxy(this.handleUpdate, this))
+            } else {
+                $(window).off('resize.bs.modal')
+            }
+        }
+
+        Modal.prototype.hideModal = function () {
+            var that = this
+            this.$element.hide()
+            this.backdrop(function () {
+                that.$body.removeClass('modal-open')
+                that.resetAdjustments()
+                that.resetScrollbar()
+                that.$element.trigger('hidden.bs.modal')
+            })
+        }
+
+        Modal.prototype.removeBackdrop = function () {
+            this.$backdrop && this.$backdrop.remove()
+            this.$backdrop = null
+        }
+
+        Modal.prototype.backdrop = function (callback) {
+            var that = this
+            var animate = this.$element.hasClass('fade') ? 'fade' : ''
+
+            if (this.isShown && this.options.backdrop) {
+                var doAnimate = $.support.transition && animate
+
+                this.$backdrop = $(document.createElement('div'))
+                    .addClass('modal-backdrop ' + animate)
+                    .appendTo(this.$body)
+
+                this.$element.on('click.dismiss.bs.modal', $.proxy(function (e) {
+                    if (this.ignoreBackdropClick) {
+                        this.ignoreBackdropClick = false
+                        return
+                    }
+                    if (e.target !== e.currentTarget) return
+                    this.options.backdrop == 'static'
+                        ? this.$element[0].focus()
+                        : this.hide()
+                }, this))
+
+                if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
+
+                this.$backdrop.addClass('in')
+
+                if (!callback) return
+
+                doAnimate ?
+                    this.$backdrop
+                        .one('bsTransitionEnd', callback)
+                        .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
+                    callback()
+
+            } else if (!this.isShown && this.$backdrop) {
+                this.$backdrop.removeClass('in')
+
+                var callbackRemove = function () {
+                    that.removeBackdrop()
+                    callback && callback()
+                }
+                $.support.transition && this.$element.hasClass('fade') ?
+                    this.$backdrop
+                        .one('bsTransitionEnd', callbackRemove)
+                        .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
+                    callbackRemove()
+
+            } else if (callback) {
+                callback()
+            }
+        }
+
+        // these following methods are used to handle overflowing modals
+
+        Modal.prototype.handleUpdate = function () {
+            this.adjustDialog()
+        }
+
+        Modal.prototype.adjustDialog = function () {
+            var modalIsOverflowing = this.$element[0].scrollHeight > document.documentElement.clientHeight
+
+            this.$element.css({
+                paddingLeft:  !this.bodyIsOverflowing && modalIsOverflowing ? this.scrollbarWidth : '',
+                paddingRight: this.bodyIsOverflowing && !modalIsOverflowing ? this.scrollbarWidth : ''
+            })
+        }
+
+        Modal.prototype.resetAdjustments = function () {
+            this.$element.css({
+                paddingLeft: '',
+                paddingRight: ''
+            })
+        }
+
+        Modal.prototype.checkScrollbar = function () {
+            var fullWindowWidth = window.innerWidth
+            if (!fullWindowWidth) { // workaround for missing window.innerWidth in IE8
+                var documentElementRect = document.documentElement.getBoundingClientRect()
+                fullWindowWidth = documentElementRect.right - Math.abs(documentElementRect.left)
+            }
+            this.bodyIsOverflowing = document.body.clientWidth < fullWindowWidth
+            this.scrollbarWidth = this.measureScrollbar()
+        }
+
+        Modal.prototype.setScrollbar = function () {
+            var bodyPad = parseInt((this.$body.css('padding-right') || 0), 10)
+            this.originalBodyPad = document.body.style.paddingRight || ''
+            if (this.bodyIsOverflowing) this.$body.css('padding-right', bodyPad + this.scrollbarWidth)
+        }
+
+        Modal.prototype.resetScrollbar = function () {
+            this.$body.css('padding-right', this.originalBodyPad)
+        }
+
+        Modal.prototype.measureScrollbar = function () { // thx walsh
+            var scrollDiv = document.createElement('div')
+            scrollDiv.className = 'modal-scrollbar-measure'
+            this.$body.append(scrollDiv)
+            var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth
+            this.$body[0].removeChild(scrollDiv)
+            return scrollbarWidth
+        }
+
+
+        // MODAL PLUGIN DEFINITION
+        // =======================
+
+        function Plugin(option, _relatedTarget) {
+            return this.each(function () {
+                var $this   = $(this)
+                var data    = $this.data('bs.modal')
+                var options = $.extend({}, Modal.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+                if (!data) $this.data('bs.modal', (data = new Modal(this, options)))
+                if (typeof option == 'string') data[option](_relatedTarget)
+                else if (options.show) data.show(_relatedTarget)
+            })
+        }
+
+        var old = $.fn.modal
+
+        $.fn.modal             = Plugin
+        $.fn.modal.Constructor = Modal
+
+
+        // MODAL NO CONFLICT
+        // =================
+
+        $.fn.modal.noConflict = function () {
+            $.fn.modal = old
+            return this
+        }
+
+
+        // MODAL DATA-API
+        // ==============
+
+        $(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function (e) {
+            var $this   = $(this)
+            var href    = $this.attr('href')
+            var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) // strip for ie7
+            var option  = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
+
+            if ($this.is('a')) e.preventDefault()
+
+            $target.one('show.bs.modal', function (showEvent) {
+                if (showEvent.isDefaultPrevented()) return // only register focus restorer if modal will actually get shown
+                $target.one('hidden.bs.modal', function () {
+                    $this.is(':visible') && $this.trigger('focus')
+                })
+            })
+            Plugin.call($target, option, this)
+        })
+
+    }(jQuery);
+};
+var load_lib_dropzone = function() {
+    (function() {
+        var Dropzone, Emitter, camelize, contentLoaded, detectVerticalSquash, drawImageIOSFix, noop, without,
+            __slice = [].slice,
+            __hasProp = {}.hasOwnProperty,
+            __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+        noop = function() {};
+
+        Emitter = (function() {
+            function Emitter() {}
+
+            Emitter.prototype.addEventListener = Emitter.prototype.on;
+
+            Emitter.prototype.on = function(event, fn) {
+                this._callbacks = this._callbacks || {};
+                if (!this._callbacks[event]) {
+                    this._callbacks[event] = [];
+                }
+                this._callbacks[event].push(fn);
+                return this;
+            };
+
+            Emitter.prototype.emit = function() {
+                var args, callback, callbacks, event, _i, _len;
+                event = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+                this._callbacks = this._callbacks || {};
+                callbacks = this._callbacks[event];
+                if (callbacks) {
+                    for (_i = 0, _len = callbacks.length; _i < _len; _i++) {
+                        callback = callbacks[_i];
+                        callback.apply(this, args);
+                    }
+                }
+                return this;
+            };
+
+            Emitter.prototype.removeListener = Emitter.prototype.off;
+
+            Emitter.prototype.removeAllListeners = Emitter.prototype.off;
+
+            Emitter.prototype.removeEventListener = Emitter.prototype.off;
+
+            Emitter.prototype.off = function(event, fn) {
+                var callback, callbacks, i, _i, _len;
+                if (!this._callbacks || arguments.length === 0) {
+                    this._callbacks = {};
+                    return this;
+                }
+                callbacks = this._callbacks[event];
+                if (!callbacks) {
+                    return this;
+                }
+                if (arguments.length === 1) {
+                    delete this._callbacks[event];
+                    return this;
+                }
+                for (i = _i = 0, _len = callbacks.length; _i < _len; i = ++_i) {
+                    callback = callbacks[i];
+                    if (callback === fn) {
+                        callbacks.splice(i, 1);
+                        break;
+                    }
+                }
+                return this;
+            };
+
+            return Emitter;
+
+        })();
+
+        Dropzone = (function(_super) {
+            var extend, resolveOption;
+
+            __extends(Dropzone, _super);
+
+            Dropzone.prototype.Emitter = Emitter;
+
+
+            /*
+             This is a list of all available events you can register on a dropzone object.
+
+             You can register an event handler like this:
+
+             dropzone.on("dragEnter", function() { });
+             */
+
+            Dropzone.prototype.events = ["drop", "dragstart", "dragend", "dragenter", "dragover", "dragleave", "addedfile", "addedfiles", "removedfile", "thumbnail", "error", "errormultiple", "processing", "processingmultiple", "uploadprogress", "totaluploadprogress", "sending", "sendingmultiple", "success", "successmultiple", "canceled", "canceledmultiple", "complete", "completemultiple", "reset", "maxfilesexceeded", "maxfilesreached", "queuecomplete"];
+
+            Dropzone.prototype.defaultOptions = {
+                url: null,
+                method: "post",
+                withCredentials: false,
+                parallelUploads: 2,
+                uploadMultiple: false,
+                maxFilesize: 256,
+                paramName: "file",
+                createImageThumbnails: true,
+                maxThumbnailFilesize: 10,
+                thumbnailWidth: 120,
+                thumbnailHeight: 120,
+                filesizeBase: 1000,
+                maxFiles: null,
+                params: {},
+                clickable: true,
+                ignoreHiddenFiles: true,
+                acceptedFiles: null,
+                acceptedMimeTypes: null,
+                autoProcessQueue: true,
+                autoQueue: true,
+                addRemoveLinks: false,
+                previewsContainer: null,
+                hiddenInputContainer: "body",
+                capture: null,
+                dictDefaultMessage: "Drop files here to upload",
+                dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
+                dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
+                dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
+                dictInvalidFileType: "You can't upload files of this type.",
+                dictResponseError: "Server responded with {{statusCode}} code.",
+                dictCancelUpload: "Cancel upload",
+                dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
+                dictRemoveFile: "Remove file",
+                dictRemoveFileConfirmation: null,
+                dictMaxFilesExceeded: "You can not upload any more files.",
+                accept: function(file, done) {
+                    return done();
+                },
+                init: function() {
+                    return noop;
+                },
+                forceFallback: false,
+                fallback: function() {
+                    var child, messageElement, span, _i, _len, _ref;
+                    this.element.className = "" + this.element.className + " dz-browser-not-supported";
+                    _ref = this.element.getElementsByTagName("div");
+                    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                        child = _ref[_i];
+                        if (/(^| )dz-message($| )/.test(child.className)) {
+                            messageElement = child;
+                            child.className = "dz-message";
+                            continue;
+                        }
+                    }
+                    if (!messageElement) {
+                        messageElement = Dropzone.createElement("<div class=\"dz-message\"><span></span></div>");
+                        this.element.appendChild(messageElement);
+                    }
+                    span = messageElement.getElementsByTagName("span")[0];
+                    if (span) {
+                        if (span.textContent != null) {
+                            span.textContent = this.options.dictFallbackMessage;
+                        } else if (span.innerText != null) {
+                            span.innerText = this.options.dictFallbackMessage;
+                        }
+                    }
+                    return this.element.appendChild(this.getFallbackForm());
+                },
+                resize: function(file) {
+                    var info, srcRatio, trgRatio;
+                    info = {
+                        srcX: 0,
+                        srcY: 0,
+                        srcWidth: file.width,
+                        srcHeight: file.height
+                    };
+                    srcRatio = file.width / file.height;
+                    info.optWidth = this.options.thumbnailWidth;
+                    info.optHeight = this.options.thumbnailHeight;
+                    if ((info.optWidth == null) && (info.optHeight == null)) {
+                        info.optWidth = info.srcWidth;
+                        info.optHeight = info.srcHeight;
+                    } else if (info.optWidth == null) {
+                        info.optWidth = srcRatio * info.optHeight;
+                    } else if (info.optHeight == null) {
+                        info.optHeight = (1 / srcRatio) * info.optWidth;
+                    }
+                    trgRatio = info.optWidth / info.optHeight;
+                    if (file.height < info.optHeight || file.width < info.optWidth) {
+                        info.trgHeight = info.srcHeight;
+                        info.trgWidth = info.srcWidth;
+                    } else {
+                        if (srcRatio > trgRatio) {
+                            info.srcHeight = file.height;
+                            info.srcWidth = info.srcHeight * trgRatio;
+                        } else {
+                            info.srcWidth = file.width;
+                            info.srcHeight = info.srcWidth / trgRatio;
+                        }
+                    }
+                    info.srcX = (file.width - info.srcWidth) / 2;
+                    info.srcY = (file.height - info.srcHeight) / 2;
+                    return info;
+                },
+
+                /*
+                 Those functions register themselves to the events on init and handle all
+                 the user interface specific stuff. Overwriting them won't break the upload
+                 but can break the way it's displayed.
+                 You can overwrite them if you don't like the default behavior. If you just
+                 want to add an additional event handler, register it on the dropzone object
+                 and don't overwrite those options.
+                 */
+                drop: function(e) {
+                    return this.element.classList.remove("dz-drag-hover");
+                },
+                dragstart: noop,
+                dragend: function(e) {
+                    return this.element.classList.remove("dz-drag-hover");
+                },
+                dragenter: function(e) {
+                    return this.element.classList.add("dz-drag-hover");
+                },
+                dragover: function(e) {
+                    return this.element.classList.add("dz-drag-hover");
+                },
+                dragleave: function(e) {
+                    return this.element.classList.remove("dz-drag-hover");
+                },
+                paste: noop,
+                reset: function() {
+                    return this.element.classList.remove("dz-started");
+                },
+                addedfile: function(file) {
+                    var node, removeFileEvent, removeLink, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
+                    if (this.element === this.previewsContainer) {
+                        this.element.classList.add("dz-started");
+                    }
+                    if (this.previewsContainer) {
+                        file.previewElement = Dropzone.createElement(this.options.previewTemplate.trim());
+                        file.previewTemplate = file.previewElement;
+                        this.previewsContainer.appendChild(file.previewElement);
+                        _ref = file.previewElement.querySelectorAll("[data-dz-name]");
+                        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                            node = _ref[_i];
+                            node.textContent = file.name;
+                        }
+                        _ref1 = file.previewElement.querySelectorAll("[data-dz-size]");
+                        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                            node = _ref1[_j];
+                            node.innerHTML = this.filesize(file.size);
+                        }
+                        if (this.options.addRemoveLinks) {
+                            file._removeLink = Dropzone.createElement("<a class=\"dz-remove\" href=\"javascript:undefined;\" data-dz-remove>" + this.options.dictRemoveFile + "</a>");
+                            file.previewElement.appendChild(file._removeLink);
+                        }
+                        removeFileEvent = (function(_this) {
+                            return function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (file.status === Dropzone.UPLOADING) {
+                                    return Dropzone.confirm(_this.options.dictCancelUploadConfirmation, function() {
+                                        return _this.removeFile(file);
+                                    });
+                                } else {
+                                    if (_this.options.dictRemoveFileConfirmation) {
+                                        return Dropzone.confirm(_this.options.dictRemoveFileConfirmation, function() {
+                                            return _this.removeFile(file);
+                                        });
+                                    } else {
+                                        return _this.removeFile(file);
+                                    }
+                                }
+                            };
+                        })(this);
+                        _ref2 = file.previewElement.querySelectorAll("[data-dz-remove]");
+                        _results = [];
+                        for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                            removeLink = _ref2[_k];
+                            _results.push(removeLink.addEventListener("click", removeFileEvent));
+                        }
+                        return _results;
+                    }
+                },
+                removedfile: function(file) {
+                    var _ref;
+                    if (file.previewElement) {
+                        if ((_ref = file.previewElement) != null) {
+                            _ref.parentNode.removeChild(file.previewElement);
+                        }
+                    }
+                    return this._updateMaxFilesReachedClass();
+                },
+                thumbnail: function(file, dataUrl) {
+                    var thumbnailElement, _i, _len, _ref;
+                    if (file.previewElement) {
+                        file.previewElement.classList.remove("dz-file-preview");
+                        _ref = file.previewElement.querySelectorAll("[data-dz-thumbnail]");
+                        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                            thumbnailElement = _ref[_i];
+                            thumbnailElement.alt = file.name;
+                            thumbnailElement.src = dataUrl;
+                        }
+                        return setTimeout(((function(_this) {
+                            return function() {
+                                return file.previewElement.classList.add("dz-image-preview");
+                            };
+                        })(this)), 1);
+                    }
+                },
+                error: function(file, message) {
+                    var node, _i, _len, _ref, _results;
+                    if (file.previewElement) {
+                        file.previewElement.classList.add("dz-error");
+                        if (typeof message !== "String" && message.error) {
+                            message = message.error;
+                        }
+                        _ref = file.previewElement.querySelectorAll("[data-dz-errormessage]");
+                        _results = [];
+                        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                            node = _ref[_i];
+                            _results.push(node.textContent = message);
+                        }
+                        return _results;
+                    }
+                },
+                errormultiple: noop,
+                processing: function(file) {
+                    if (file.previewElement) {
+                        file.previewElement.classList.add("dz-processing");
+                        if (file._removeLink) {
+                            return file._removeLink.textContent = this.options.dictCancelUpload;
+                        }
+                    }
+                },
+                processingmultiple: noop,
+                uploadprogress: function(file, progress, bytesSent) {
+                    var node, _i, _len, _ref, _results;
+                    if (file.previewElement) {
+                        _ref = file.previewElement.querySelectorAll("[data-dz-uploadprogress]");
+                        _results = [];
+                        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                            node = _ref[_i];
+                            if (node.nodeName === 'PROGRESS') {
+                                _results.push(node.value = progress);
+                            } else {
+                                _results.push(node.style.width = "" + progress + "%");
+                            }
+                        }
+                        return _results;
+                    }
+                },
+                totaluploadprogress: noop,
+                sending: noop,
+                sendingmultiple: noop,
+                success: function(file) {
+                    if (file.previewElement) {
+                        return file.previewElement.classList.add("dz-success");
+                    }
+                },
+                successmultiple: noop,
+                canceled: function(file) {
+                    return this.emit("error", file, "Upload canceled.");
+                },
+                canceledmultiple: noop,
+                complete: function(file) {
+                    if (file._removeLink) {
+                        file._removeLink.textContent = this.options.dictRemoveFile;
+                    }
+                    if (file.previewElement) {
+                        return file.previewElement.classList.add("dz-complete");
+                    }
+                },
+                completemultiple: noop,
+                maxfilesexceeded: noop,
+                maxfilesreached: noop,
+                queuecomplete: noop,
+                addedfiles: noop,
+                previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-image\"><img data-dz-thumbnail /></div>\n  <div class=\"dz-details\">\n    <div class=\"dz-size\"><span data-dz-size></span></div>\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n  </div>\n  <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n  <div class=\"dz-success-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Check</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>\n      </g>\n    </svg>\n  </div>\n  <div class=\"dz-error-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Error</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <g id=\"Check-+-Oval-2\" sketch:type=\"MSLayerGroup\" stroke=\"#747474\" stroke-opacity=\"0.198794158\" fill=\"#FFFFFF\" fill-opacity=\"0.816519475\">\n          <path d=\"M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" sketch:type=\"MSShapeGroup\"></path>\n        </g>\n      </g>\n    </svg>\n  </div>\n</div>"
+            };
+
+            extend = function() {
+                var key, object, objects, target, val, _i, _len;
+                target = arguments[0], objects = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+                for (_i = 0, _len = objects.length; _i < _len; _i++) {
+                    object = objects[_i];
+                    for (key in object) {
+                        val = object[key];
+                        target[key] = val;
+                    }
+                }
+                return target;
+            };
+
+            function Dropzone(element, options) {
+                var elementOptions, fallback, _ref;
+                this.element = element;
+                this.version = Dropzone.version;
+                this.defaultOptions.previewTemplate = this.defaultOptions.previewTemplate.replace(/\n*/g, "");
+                this.clickableElements = [];
+                this.listeners = [];
+                this.files = [];
+                if (typeof this.element === "string") {
+                    this.element = document.querySelector(this.element);
+                }
+                if (!(this.element && (this.element.nodeType != null))) {
+                    throw new Error("Invalid dropzone element.");
+                }
+                if (this.element.dropzone) {
+                    throw new Error("Dropzone already attached.");
+                }
+                Dropzone.instances.push(this);
+                this.element.dropzone = this;
+                elementOptions = (_ref = Dropzone.optionsForElement(this.element)) != null ? _ref : {};
+                this.options = extend({}, this.defaultOptions, elementOptions, options != null ? options : {});
+                if (this.options.forceFallback || !Dropzone.isBrowserSupported()) {
+                    return this.options.fallback.call(this);
+                }
+                if (this.options.url == null) {
+                    this.options.url = this.element.getAttribute("action");
+                }
+                if (!this.options.url) {
+                    throw new Error("No URL provided.");
+                }
+                if (this.options.acceptedFiles && this.options.acceptedMimeTypes) {
+                    throw new Error("You can't provide both 'acceptedFiles' and 'acceptedMimeTypes'. 'acceptedMimeTypes' is deprecated.");
+                }
+                if (this.options.acceptedMimeTypes) {
+                    this.options.acceptedFiles = this.options.acceptedMimeTypes;
+                    delete this.options.acceptedMimeTypes;
+                }
+                this.options.method = this.options.method.toUpperCase();
+                if ((fallback = this.getExistingFallback()) && fallback.parentNode) {
+                    fallback.parentNode.removeChild(fallback);
+                }
+                if (this.options.previewsContainer !== false) {
+                    if (this.options.previewsContainer) {
+                        this.previewsContainer = Dropzone.getElement(this.options.previewsContainer, "previewsContainer");
+                    } else {
+                        this.previewsContainer = this.element;
+                    }
+                }
+                if (this.options.clickable) {
+                    if (this.options.clickable === true) {
+                        this.clickableElements = [this.element];
+                    } else {
+                        this.clickableElements = Dropzone.getElements(this.options.clickable, "clickable");
+                    }
+                }
+                this.init();
+            }
+
+            Dropzone.prototype.getAcceptedFiles = function() {
+                var file, _i, _len, _ref, _results;
+                _ref = this.files;
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    file = _ref[_i];
+                    if (file.accepted) {
+                        _results.push(file);
+                    }
+                }
+                return _results;
+            };
+
+            Dropzone.prototype.getRejectedFiles = function() {
+                var file, _i, _len, _ref, _results;
+                _ref = this.files;
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    file = _ref[_i];
+                    if (!file.accepted) {
+                        _results.push(file);
+                    }
+                }
+                return _results;
+            };
+
+            Dropzone.prototype.getFilesWithStatus = function(status) {
+                var file, _i, _len, _ref, _results;
+                _ref = this.files;
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    file = _ref[_i];
+                    if (file.status === status) {
+                        _results.push(file);
+                    }
+                }
+                return _results;
+            };
+
+            Dropzone.prototype.getQueuedFiles = function() {
+                return this.getFilesWithStatus(Dropzone.QUEUED);
+            };
+
+            Dropzone.prototype.getUploadingFiles = function() {
+                return this.getFilesWithStatus(Dropzone.UPLOADING);
+            };
+
+            Dropzone.prototype.getAddedFiles = function() {
+                return this.getFilesWithStatus(Dropzone.ADDED);
+            };
+
+            Dropzone.prototype.getActiveFiles = function() {
+                var file, _i, _len, _ref, _results;
+                _ref = this.files;
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    file = _ref[_i];
+                    if (file.status === Dropzone.UPLOADING || file.status === Dropzone.QUEUED) {
+                        _results.push(file);
+                    }
+                }
+                return _results;
+            };
+
+            Dropzone.prototype.init = function() {
+                var eventName, noPropagation, setupHiddenFileInput, _i, _len, _ref, _ref1;
+                if (this.element.tagName === "form") {
+                    this.element.setAttribute("enctype", "multipart/form-data");
+                }
+                if (this.element.classList.contains("dropzone") && !this.element.querySelector(".dz-message")) {
+                    this.element.appendChild(Dropzone.createElement("<div class=\"dz-default dz-message\"><span>" + this.options.dictDefaultMessage + "</span></div>"));
+                }
+                if (this.clickableElements.length) {
+                    setupHiddenFileInput = (function(_this) {
+                        return function() {
+                            if (_this.hiddenFileInput) {
+                                _this.hiddenFileInput.parentNode.removeChild(_this.hiddenFileInput);
+                            }
+                            _this.hiddenFileInput = document.createElement("input");
+                            _this.hiddenFileInput.setAttribute("type", "file");
+                            if ((_this.options.maxFiles == null) || _this.options.maxFiles > 1) {
+                                _this.hiddenFileInput.setAttribute("multiple", "multiple");
+                            }
+                            _this.hiddenFileInput.className = "dz-hidden-input";
+                            if (_this.options.acceptedFiles != null) {
+                                _this.hiddenFileInput.setAttribute("accept", _this.options.acceptedFiles);
+                            }
+                            if (_this.options.capture != null) {
+                                _this.hiddenFileInput.setAttribute("capture", _this.options.capture);
+                            }
+                            _this.hiddenFileInput.style.visibility = "hidden";
+                            _this.hiddenFileInput.style.position = "absolute";
+                            _this.hiddenFileInput.style.top = "0";
+                            _this.hiddenFileInput.style.left = "0";
+                            _this.hiddenFileInput.style.height = "0";
+                            _this.hiddenFileInput.style.width = "0";
+                            document.querySelector(_this.options.hiddenInputContainer).appendChild(_this.hiddenFileInput);
+                            return _this.hiddenFileInput.addEventListener("change", function() {
+                                var file, files, _i, _len;
+                                files = _this.hiddenFileInput.files;
+                                if (files.length) {
+                                    for (_i = 0, _len = files.length; _i < _len; _i++) {
+                                        file = files[_i];
+                                        _this.addFile(file);
+                                    }
+                                }
+                                _this.emit("addedfiles", files);
+                                return setupHiddenFileInput();
+                            });
+                        };
+                    })(this);
+                    setupHiddenFileInput();
+                }
+                this.URL = (_ref = window.URL) != null ? _ref : window.webkitURL;
+                _ref1 = this.events;
+                for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+                    eventName = _ref1[_i];
+                    this.on(eventName, this.options[eventName]);
+                }
+                this.on("uploadprogress", (function(_this) {
+                    return function() {
+                        return _this.updateTotalUploadProgress();
+                    };
+                })(this));
+                this.on("removedfile", (function(_this) {
+                    return function() {
+                        return _this.updateTotalUploadProgress();
+                    };
+                })(this));
+                this.on("canceled", (function(_this) {
+                    return function(file) {
+                        return _this.emit("complete", file);
+                    };
+                })(this));
+                this.on("complete", (function(_this) {
+                    return function(file) {
+                        if (_this.getAddedFiles().length === 0 && _this.getUploadingFiles().length === 0 && _this.getQueuedFiles().length === 0) {
+                            return setTimeout((function() {
+                                return _this.emit("queuecomplete");
+                            }), 0);
+                        }
+                    };
+                })(this));
+                noPropagation = function(e) {
+                    e.stopPropagation();
+                    if (e.preventDefault) {
+                        return e.preventDefault();
+                    } else {
+                        return e.returnValue = false;
+                    }
+                };
+                this.listeners = [
+                    {
+                        element: this.element,
+                        events: {
+                            "dragstart": (function(_this) {
+                                return function(e) {
+                                    return _this.emit("dragstart", e);
+                                };
+                            })(this),
+                            "dragenter": (function(_this) {
+                                return function(e) {
+                                    noPropagation(e);
+                                    return _this.emit("dragenter", e);
+                                };
+                            })(this),
+                            "dragover": (function(_this) {
+                                return function(e) {
+                                    var efct;
+                                    try {
+                                        efct = e.dataTransfer.effectAllowed;
+                                    } catch (_error) {}
+                                    e.dataTransfer.dropEffect = 'move' === efct || 'linkMove' === efct ? 'move' : 'copy';
+                                    noPropagation(e);
+                                    return _this.emit("dragover", e);
+                                };
+                            })(this),
+                            "dragleave": (function(_this) {
+                                return function(e) {
+                                    return _this.emit("dragleave", e);
+                                };
+                            })(this),
+                            "drop": (function(_this) {
+                                return function(e) {
+                                    noPropagation(e);
+                                    return _this.drop(e);
+                                };
+                            })(this),
+                            "dragend": (function(_this) {
+                                return function(e) {
+                                    return _this.emit("dragend", e);
+                                };
+                            })(this)
+                        }
+                    }
+                ];
+                this.clickableElements.forEach((function(_this) {
+                    return function(clickableElement) {
+                        return _this.listeners.push({
+                            element: clickableElement,
+                            events: {
+                                "click": function(evt) {
+                                    if ((clickableElement !== _this.element) || (evt.target === _this.element || Dropzone.elementInside(evt.target, _this.element.querySelector(".dz-message")))) {
+                                        _this.hiddenFileInput.click();
+                                    }
+                                    return true;
+                                }
+                            }
+                        });
+                    };
+                })(this));
+                this.enable();
+                return this.options.init.call(this);
+            };
+
+            Dropzone.prototype.destroy = function() {
+                var _ref;
+                this.disable();
+                this.removeAllFiles(true);
+                if ((_ref = this.hiddenFileInput) != null ? _ref.parentNode : void 0) {
+                    this.hiddenFileInput.parentNode.removeChild(this.hiddenFileInput);
+                    this.hiddenFileInput = null;
+                }
+                delete this.element.dropzone;
+                return Dropzone.instances.splice(Dropzone.instances.indexOf(this), 1);
+            };
+
+            Dropzone.prototype.updateTotalUploadProgress = function() {
+                var activeFiles, file, totalBytes, totalBytesSent, totalUploadProgress, _i, _len, _ref;
+                totalBytesSent = 0;
+                totalBytes = 0;
+                activeFiles = this.getActiveFiles();
+                if (activeFiles.length) {
+                    _ref = this.getActiveFiles();
+                    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                        file = _ref[_i];
+                        totalBytesSent += file.upload.bytesSent;
+                        totalBytes += file.upload.total;
+                    }
+                    totalUploadProgress = 100 * totalBytesSent / totalBytes;
+                } else {
+                    totalUploadProgress = 100;
+                }
+                return this.emit("totaluploadprogress", totalUploadProgress, totalBytes, totalBytesSent);
+            };
+
+            Dropzone.prototype._getParamName = function(n) {
+                if (typeof this.options.paramName === "function") {
+                    return this.options.paramName(n);
+                } else {
+                    return "" + this.options.paramName + (this.options.uploadMultiple ? "[" + n + "]" : "");
+                }
+            };
+
+            Dropzone.prototype.getFallbackForm = function() {
+                var existingFallback, fields, fieldsString, form;
+                if (existingFallback = this.getExistingFallback()) {
+                    return existingFallback;
+                }
+                fieldsString = "<div class=\"dz-fallback\">";
+                if (this.options.dictFallbackText) {
+                    fieldsString += "<p>" + this.options.dictFallbackText + "</p>";
+                }
+                fieldsString += "<input type=\"file\" name=\"" + (this._getParamName(0)) + "\" " + (this.options.uploadMultiple ? 'multiple="multiple"' : void 0) + " /><input type=\"submit\" value=\"Upload!\"></div>";
+                fields = Dropzone.createElement(fieldsString);
+                if (this.element.tagName !== "FORM") {
+                    form = Dropzone.createElement("<form action=\"" + this.options.url + "\" enctype=\"multipart/form-data\" method=\"" + this.options.method + "\"></form>");
+                    form.appendChild(fields);
+                } else {
+                    this.element.setAttribute("enctype", "multipart/form-data");
+                    this.element.setAttribute("method", this.options.method);
+                }
+                return form != null ? form : fields;
+            };
+
+            Dropzone.prototype.getExistingFallback = function() {
+                var fallback, getFallback, tagName, _i, _len, _ref;
+                getFallback = function(elements) {
+                    var el, _i, _len;
+                    for (_i = 0, _len = elements.length; _i < _len; _i++) {
+                        el = elements[_i];
+                        if (/(^| )fallback($| )/.test(el.className)) {
+                            return el;
+                        }
+                    }
+                };
+                _ref = ["div", "form"];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    tagName = _ref[_i];
+                    if (fallback = getFallback(this.element.getElementsByTagName(tagName))) {
+                        return fallback;
+                    }
+                }
+            };
+
+            Dropzone.prototype.setupEventListeners = function() {
+                var elementListeners, event, listener, _i, _len, _ref, _results;
+                _ref = this.listeners;
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    elementListeners = _ref[_i];
+                    _results.push((function() {
+                        var _ref1, _results1;
+                        _ref1 = elementListeners.events;
+                        _results1 = [];
+                        for (event in _ref1) {
+                            listener = _ref1[event];
+                            _results1.push(elementListeners.element.addEventListener(event, listener, false));
+                        }
+                        return _results1;
+                    })());
+                }
+                return _results;
+            };
+
+            Dropzone.prototype.removeEventListeners = function() {
+                var elementListeners, event, listener, _i, _len, _ref, _results;
+                _ref = this.listeners;
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    elementListeners = _ref[_i];
+                    _results.push((function() {
+                        var _ref1, _results1;
+                        _ref1 = elementListeners.events;
+                        _results1 = [];
+                        for (event in _ref1) {
+                            listener = _ref1[event];
+                            _results1.push(elementListeners.element.removeEventListener(event, listener, false));
+                        }
+                        return _results1;
+                    })());
+                }
+                return _results;
+            };
+
+            Dropzone.prototype.disable = function() {
+                var file, _i, _len, _ref, _results;
+                this.clickableElements.forEach(function(element) {
+                    return element.classList.remove("dz-clickable");
+                });
+                this.removeEventListeners();
+                _ref = this.files;
+                _results = [];
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    file = _ref[_i];
+                    _results.push(this.cancelUpload(file));
+                }
+                return _results;
+            };
+
+            Dropzone.prototype.enable = function() {
+                this.clickableElements.forEach(function(element) {
+                    return element.classList.add("dz-clickable");
+                });
+                return this.setupEventListeners();
+            };
+
+            Dropzone.prototype.filesize = function(size) {
+                var cutoff, i, selectedSize, selectedUnit, unit, units, _i, _len;
+                selectedSize = 0;
+                selectedUnit = "b";
+                if (size > 0) {
+                    units = ['TB', 'GB', 'MB', 'KB', 'b'];
+                    for (i = _i = 0, _len = units.length; _i < _len; i = ++_i) {
+                        unit = units[i];
+                        cutoff = Math.pow(this.options.filesizeBase, 4 - i) / 10;
+                        if (size >= cutoff) {
+                            selectedSize = size / Math.pow(this.options.filesizeBase, 4 - i);
+                            selectedUnit = unit;
+                            break;
+                        }
+                    }
+                    selectedSize = Math.round(10 * selectedSize) / 10;
+                }
+                return "<strong>" + selectedSize + "</strong> " + selectedUnit;
+            };
+
+            Dropzone.prototype._updateMaxFilesReachedClass = function() {
+                if ((this.options.maxFiles != null) && this.getAcceptedFiles().length >= this.options.maxFiles) {
+                    if (this.getAcceptedFiles().length === this.options.maxFiles) {
+                        this.emit('maxfilesreached', this.files);
+                    }
+                    return this.element.classList.add("dz-max-files-reached");
+                } else {
+                    return this.element.classList.remove("dz-max-files-reached");
+                }
+            };
+
+            Dropzone.prototype.drop = function(e) {
+                var files, items;
+                if (!e.dataTransfer) {
+                    return;
+                }
+                this.emit("drop", e);
+                files = e.dataTransfer.files;
+                this.emit("addedfiles", files);
+                if (files.length) {
+                    items = e.dataTransfer.items;
+                    if (items && items.length && (items[0].webkitGetAsEntry != null)) {
+                        this._addFilesFromItems(items);
+                    } else {
+                        this.handleFiles(files);
+                    }
+                }
+            };
+
+            Dropzone.prototype.paste = function(e) {
+                var items, _ref;
+                if ((e != null ? (_ref = e.clipboardData) != null ? _ref.items : void 0 : void 0) == null) {
+                    return;
+                }
+                this.emit("paste", e);
+                items = e.clipboardData.items;
+                if (items.length) {
+                    return this._addFilesFromItems(items);
+                }
+            };
+
+            Dropzone.prototype.handleFiles = function(files) {
+                var file, _i, _len, _results;
+                _results = [];
+                for (_i = 0, _len = files.length; _i < _len; _i++) {
+                    file = files[_i];
+                    _results.push(this.addFile(file));
+                }
+                return _results;
+            };
+
+            Dropzone.prototype._addFilesFromItems = function(items) {
+                var entry, item, _i, _len, _results;
+                _results = [];
+                for (_i = 0, _len = items.length; _i < _len; _i++) {
+                    item = items[_i];
+                    if ((item.webkitGetAsEntry != null) && (entry = item.webkitGetAsEntry())) {
+                        if (entry.isFile) {
+                            _results.push(this.addFile(item.getAsFile()));
+                        } else if (entry.isDirectory) {
+                            _results.push(this._addFilesFromDirectory(entry, entry.name));
+                        } else {
+                            _results.push(void 0);
+                        }
+                    } else if (item.getAsFile != null) {
+                        if ((item.kind == null) || item.kind === "file") {
+                            _results.push(this.addFile(item.getAsFile()));
+                        } else {
+                            _results.push(void 0);
+                        }
+                    } else {
+                        _results.push(void 0);
+                    }
+                }
+                return _results;
+            };
+
+            Dropzone.prototype._addFilesFromDirectory = function(directory, path) {
+                var dirReader, entriesReader;
+                dirReader = directory.createReader();
+                entriesReader = (function(_this) {
+                    return function(entries) {
+                        var entry, _i, _len;
+                        for (_i = 0, _len = entries.length; _i < _len; _i++) {
+                            entry = entries[_i];
+                            if (entry.isFile) {
+                                entry.file(function(file) {
+                                    if (_this.options.ignoreHiddenFiles && file.name.substring(0, 1) === '.') {
+                                        return;
+                                    }
+                                    file.fullPath = "" + path + "/" + file.name;
+                                    return _this.addFile(file);
+                                });
+                            } else if (entry.isDirectory) {
+                                _this._addFilesFromDirectory(entry, "" + path + "/" + entry.name);
+                            }
+                        }
+                    };
+                })(this);
+                return dirReader.readEntries(entriesReader, function(error) {
+                    return typeof console !== "undefined" && console !== null ? typeof console.log === "function" ? console.log(error) : void 0 : void 0;
+                });
+            };
+
+            Dropzone.prototype.accept = function(file, done) {
+                if (file.size > this.options.maxFilesize * 1024 * 1024) {
+                    return done(this.options.dictFileTooBig.replace("{{filesize}}", Math.round(file.size / 1024 / 10.24) / 100).replace("{{maxFilesize}}", this.options.maxFilesize));
+                } else if (!Dropzone.isValidFile(file, this.options.acceptedFiles)) {
+                    return done(this.options.dictInvalidFileType);
+                } else if ((this.options.maxFiles != null) && this.getAcceptedFiles().length >= this.options.maxFiles) {
+                    done(this.options.dictMaxFilesExceeded.replace("{{maxFiles}}", this.options.maxFiles));
+                    return this.emit("maxfilesexceeded", file);
+                } else {
+                    return this.options.accept.call(this, file, done);
+                }
+            };
+
+            Dropzone.prototype.addFile = function(file) {
+                file.upload = {
+                    progress: 0,
+                    total: file.size,
+                    bytesSent: 0
+                };
+                this.files.push(file);
+                file.status = Dropzone.ADDED;
+                this.emit("addedfile", file);
+                this._enqueueThumbnail(file);
+                return this.accept(file, (function(_this) {
+                    return function(error) {
+                        if (error) {
+                            file.accepted = false;
+                            _this._errorProcessing([file], error);
+                        } else {
+                            file.accepted = true;
+                            if (_this.options.autoQueue) {
+                                _this.enqueueFile(file);
+                            }
+                        }
+                        return _this._updateMaxFilesReachedClass();
+                    };
+                })(this));
+            };
+
+            Dropzone.prototype.enqueueFiles = function(files) {
+                var file, _i, _len;
+                for (_i = 0, _len = files.length; _i < _len; _i++) {
+                    file = files[_i];
+                    this.enqueueFile(file);
+                }
+                return null;
+            };
+
+            Dropzone.prototype.enqueueFile = function(file) {
+                if (file.status === Dropzone.ADDED && file.accepted === true) {
+                    file.status = Dropzone.QUEUED;
+                    if (this.options.autoProcessQueue) {
+                        return setTimeout(((function(_this) {
+                            return function() {
+                                return _this.processQueue();
+                            };
+                        })(this)), 0);
+                    }
+                } else {
+                    throw new Error("This file can't be queued because it has already been processed or was rejected.");
+                }
+            };
+
+            Dropzone.prototype._thumbnailQueue = [];
+
+            Dropzone.prototype._processingThumbnail = false;
+
+            Dropzone.prototype._enqueueThumbnail = function(file) {
+                if (this.options.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.options.maxThumbnailFilesize * 1024 * 1024) {
+                    this._thumbnailQueue.push(file);
+                    return setTimeout(((function(_this) {
+                        return function() {
+                            return _this._processThumbnailQueue();
+                        };
+                    })(this)), 0);
+                }
+            };
+
+            Dropzone.prototype._processThumbnailQueue = function() {
+                if (this._processingThumbnail || this._thumbnailQueue.length === 0) {
+                    return;
+                }
+                this._processingThumbnail = true;
+                return this.createThumbnail(this._thumbnailQueue.shift(), (function(_this) {
+                    return function() {
+                        _this._processingThumbnail = false;
+                        return _this._processThumbnailQueue();
+                    };
+                })(this));
+            };
+
+            Dropzone.prototype.removeFile = function(file) {
+                if (file.status === Dropzone.UPLOADING) {
+                    this.cancelUpload(file);
+                }
+                this.files = without(this.files, file);
+                this.emit("removedfile", file);
+                if (this.files.length === 0) {
+                    return this.emit("reset");
+                }
+            };
+
+            Dropzone.prototype.removeAllFiles = function(cancelIfNecessary) {
+                var file, _i, _len, _ref;
+                if (cancelIfNecessary == null) {
+                    cancelIfNecessary = false;
+                }
+                _ref = this.files.slice();
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    file = _ref[_i];
+                    if (file.status !== Dropzone.UPLOADING || cancelIfNecessary) {
+                        this.removeFile(file);
+                    }
+                }
+                return null;
+            };
+
+            Dropzone.prototype.createThumbnail = function(file, callback) {
+                var fileReader;
+                fileReader = new FileReader;
+                fileReader.onload = (function(_this) {
+                    return function() {
+                        if (file.type === "image/svg+xml") {
+                            _this.emit("thumbnail", file, fileReader.result);
+                            if (callback != null) {
+                                callback();
+                            }
+                            return;
+                        }
+                        return _this.createThumbnailFromUrl(file, fileReader.result, callback);
+                    };
+                })(this);
+                return fileReader.readAsDataURL(file);
+            };
+
+            Dropzone.prototype.createThumbnailFromUrl = function(file, imageUrl, callback, crossOrigin) {
+                var img;
+                img = document.createElement("img");
+                if (crossOrigin) {
+                    img.crossOrigin = crossOrigin;
+                }
+                img.onload = (function(_this) {
+                    return function() {
+                        var canvas, ctx, resizeInfo, thumbnail, _ref, _ref1, _ref2, _ref3;
+                        file.width = img.width;
+                        file.height = img.height;
+                        resizeInfo = _this.options.resize.call(_this, file);
+                        if (resizeInfo.trgWidth == null) {
+                            resizeInfo.trgWidth = resizeInfo.optWidth;
+                        }
+                        if (resizeInfo.trgHeight == null) {
+                            resizeInfo.trgHeight = resizeInfo.optHeight;
+                        }
+                        canvas = document.createElement("canvas");
+                        ctx = canvas.getContext("2d");
+                        canvas.width = resizeInfo.trgWidth;
+                        canvas.height = resizeInfo.trgHeight;
+                        drawImageIOSFix(ctx, img, (_ref = resizeInfo.srcX) != null ? _ref : 0, (_ref1 = resizeInfo.srcY) != null ? _ref1 : 0, resizeInfo.srcWidth, resizeInfo.srcHeight, (_ref2 = resizeInfo.trgX) != null ? _ref2 : 0, (_ref3 = resizeInfo.trgY) != null ? _ref3 : 0, resizeInfo.trgWidth, resizeInfo.trgHeight);
+                        thumbnail = canvas.toDataURL("image/png");
+                        _this.emit("thumbnail", file, thumbnail);
+                        if (callback != null) {
+                            return callback();
+                        }
+                    };
+                })(this);
+                if (callback != null) {
+                    img.onerror = callback;
+                }
+                return img.src = imageUrl;
+            };
+
+            Dropzone.prototype.processQueue = function() {
+                var i, parallelUploads, processingLength, queuedFiles;
+                parallelUploads = this.options.parallelUploads;
+                processingLength = this.getUploadingFiles().length;
+                i = processingLength;
+                if (processingLength >= parallelUploads) {
+                    return;
+                }
+                queuedFiles = this.getQueuedFiles();
+                if (!(queuedFiles.length > 0)) {
+                    return;
+                }
+                if (this.options.uploadMultiple) {
+                    return this.processFiles(queuedFiles.slice(0, parallelUploads - processingLength));
+                } else {
+                    while (i < parallelUploads) {
+                        if (!queuedFiles.length) {
+                            return;
+                        }
+                        this.processFile(queuedFiles.shift());
+                        i++;
+                    }
+                }
+            };
+
+            Dropzone.prototype.processFile = function(file) {
+                return this.processFiles([file]);
+            };
+
+            Dropzone.prototype.processFiles = function(files) {
+                var file, _i, _len;
+                for (_i = 0, _len = files.length; _i < _len; _i++) {
+                    file = files[_i];
+                    file.processing = true;
+                    file.status = Dropzone.UPLOADING;
+                    this.emit("processing", file);
+                }
+                if (this.options.uploadMultiple) {
+                    this.emit("processingmultiple", files);
+                }
+                return this.uploadFiles(files);
+            };
+
+            Dropzone.prototype._getFilesWithXhr = function(xhr) {
+                var file, files;
+                return files = (function() {
+                    var _i, _len, _ref, _results;
+                    _ref = this.files;
+                    _results = [];
+                    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                        file = _ref[_i];
+                        if (file.xhr === xhr) {
+                            _results.push(file);
+                        }
+                    }
+                    return _results;
+                }).call(this);
+            };
+
+            Dropzone.prototype.cancelUpload = function(file) {
+                var groupedFile, groupedFiles, _i, _j, _len, _len1, _ref;
+                if (file.status === Dropzone.UPLOADING) {
+                    groupedFiles = this._getFilesWithXhr(file.xhr);
+                    for (_i = 0, _len = groupedFiles.length; _i < _len; _i++) {
+                        groupedFile = groupedFiles[_i];
+                        groupedFile.status = Dropzone.CANCELED;
+                    }
+                    file.xhr.abort();
+                    for (_j = 0, _len1 = groupedFiles.length; _j < _len1; _j++) {
+                        groupedFile = groupedFiles[_j];
+                        this.emit("canceled", groupedFile);
+                    }
+                    if (this.options.uploadMultiple) {
+                        this.emit("canceledmultiple", groupedFiles);
+                    }
+                } else if ((_ref = file.status) === Dropzone.ADDED || _ref === Dropzone.QUEUED) {
+                    file.status = Dropzone.CANCELED;
+                    this.emit("canceled", file);
+                    if (this.options.uploadMultiple) {
+                        this.emit("canceledmultiple", [file]);
+                    }
+                }
+                if (this.options.autoProcessQueue) {
+                    return this.processQueue();
+                }
+            };
+
+            resolveOption = function() {
+                var args, option;
+                option = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+                if (typeof option === 'function') {
+                    return option.apply(this, args);
+                }
+                return option;
+            };
+
+            Dropzone.prototype.uploadFile = function(file) {
+                return this.uploadFiles([file]);
+            };
+
+            Dropzone.prototype.uploadFiles = function(files) {
+                var file, formData, handleError, headerName, headerValue, headers, i, input, inputName, inputType, key, method, option, progressObj, response, updateProgress, url, value, xhr, _i, _j, _k, _l, _len, _len1, _len2, _len3, _m, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+                xhr = new XMLHttpRequest();
+                for (_i = 0, _len = files.length; _i < _len; _i++) {
+                    file = files[_i];
+                    file.xhr = xhr;
+                }
+                method = resolveOption(this.options.method, files);
+                url = resolveOption(this.options.url, files);
+                xhr.open(method, url, true);
+                xhr.withCredentials = !!this.options.withCredentials;
+                response = null;
+                handleError = (function(_this) {
+                    return function() {
+                        var _j, _len1, _results;
+                        _results = [];
+                        for (_j = 0, _len1 = files.length; _j < _len1; _j++) {
+                            file = files[_j];
+                            _results.push(_this._errorProcessing(files, response || _this.options.dictResponseError.replace("{{statusCode}}", xhr.status), xhr));
+                        }
+                        return _results;
+                    };
+                })(this);
+                updateProgress = (function(_this) {
+                    return function(e) {
+                        var allFilesFinished, progress, _j, _k, _l, _len1, _len2, _len3, _results;
+                        if (e != null) {
+                            progress = 100 * e.loaded / e.total;
+                            for (_j = 0, _len1 = files.length; _j < _len1; _j++) {
+                                file = files[_j];
+                                file.upload = {
+                                    progress: progress,
+                                    total: e.total,
+                                    bytesSent: e.loaded
+                                };
+                            }
+                        } else {
+                            allFilesFinished = true;
+                            progress = 100;
+                            for (_k = 0, _len2 = files.length; _k < _len2; _k++) {
+                                file = files[_k];
+                                if (!(file.upload.progress === 100 && file.upload.bytesSent === file.upload.total)) {
+                                    allFilesFinished = false;
+                                }
+                                file.upload.progress = progress;
+                                file.upload.bytesSent = file.upload.total;
+                            }
+                            if (allFilesFinished) {
+                                return;
+                            }
+                        }
+                        _results = [];
+                        for (_l = 0, _len3 = files.length; _l < _len3; _l++) {
+                            file = files[_l];
+                            _results.push(_this.emit("uploadprogress", file, progress, file.upload.bytesSent));
+                        }
+                        return _results;
+                    };
+                })(this);
+                xhr.onload = (function(_this) {
+                    return function(e) {
+                        var _ref;
+                        if (files[0].status === Dropzone.CANCELED) {
+                            return;
+                        }
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
+                        response = xhr.responseText;
+                        if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
+                            try {
+                                response = JSON.parse(response);
+                            } catch (_error) {
+                                e = _error;
+                                response = "Invalid JSON response from server.";
+                            }
+                        }
+                        updateProgress();
+                        if (!((200 <= (_ref = xhr.status) && _ref < 300))) {
+                            return handleError();
+                        } else {
+                            return _this._finished(files, response, e);
+                        }
+                    };
+                })(this);
+                xhr.onerror = (function(_this) {
+                    return function() {
+                        if (files[0].status === Dropzone.CANCELED) {
+                            return;
+                        }
+                        return handleError();
+                    };
+                })(this);
+                progressObj = (_ref = xhr.upload) != null ? _ref : xhr;
+                progressObj.onprogress = updateProgress;
+                headers = {
+                    "Accept": "application/json",
+                    "Cache-Control": "no-cache",
+                    "X-Requested-With": "XMLHttpRequest"
+                };
+                if (this.options.headers) {
+                    extend(headers, this.options.headers);
+                }
+                for (headerName in headers) {
+                    headerValue = headers[headerName];
+                    if (headerValue) {
+                        xhr.setRequestHeader(headerName, headerValue);
+                    }
+                }
+                formData = new FormData();
+                if (this.options.params) {
+                    _ref1 = this.options.params;
+                    for (key in _ref1) {
+                        value = _ref1[key];
+                        formData.append(key, value);
+                    }
+                }
+                for (_j = 0, _len1 = files.length; _j < _len1; _j++) {
+                    file = files[_j];
+                    this.emit("sending", file, xhr, formData);
+                }
+                if (this.options.uploadMultiple) {
+                    this.emit("sendingmultiple", files, xhr, formData);
+                }
+                if (this.element.tagName === "FORM") {
+                    _ref2 = this.element.querySelectorAll("input, textarea, select, button");
+                    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+                        input = _ref2[_k];
+                        inputName = input.getAttribute("name");
+                        inputType = input.getAttribute("type");
+                        if (input.tagName === "SELECT" && input.hasAttribute("multiple")) {
+                            _ref3 = input.options;
+                            for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+                                option = _ref3[_l];
+                                if (option.selected) {
+                                    formData.append(inputName, option.value);
+                                }
+                            }
+                        } else if (!inputType || ((_ref4 = inputType.toLowerCase()) !== "checkbox" && _ref4 !== "radio") || input.checked) {
+                            formData.append(inputName, input.value);
+                        }
+                    }
+                }
+                for (i = _m = 0, _ref5 = files.length - 1; 0 <= _ref5 ? _m <= _ref5 : _m >= _ref5; i = 0 <= _ref5 ? ++_m : --_m) {
+                    formData.append(this._getParamName(i), files[i], files[i].name);
+                }
+                return this.submitRequest(xhr, formData, files);
+            };
+
+            Dropzone.prototype.submitRequest = function(xhr, formData, files) {
+                return xhr.send(formData);
+            };
+
+            Dropzone.prototype._finished = function(files, responseText, e) {
+                var file, _i, _len;
+                for (_i = 0, _len = files.length; _i < _len; _i++) {
+                    file = files[_i];
+                    file.status = Dropzone.SUCCESS;
+                    this.emit("success", file, responseText, e);
+                    this.emit("complete", file);
+                }
+                if (this.options.uploadMultiple) {
+                    this.emit("successmultiple", files, responseText, e);
+                    this.emit("completemultiple", files);
+                }
+                if (this.options.autoProcessQueue) {
+                    return this.processQueue();
+                }
+            };
+
+            Dropzone.prototype._errorProcessing = function(files, message, xhr) {
+                var file, _i, _len;
+                for (_i = 0, _len = files.length; _i < _len; _i++) {
+                    file = files[_i];
+                    file.status = Dropzone.ERROR;
+                    this.emit("error", file, message, xhr);
+                    this.emit("complete", file);
+                }
+                if (this.options.uploadMultiple) {
+                    this.emit("errormultiple", files, message, xhr);
+                    this.emit("completemultiple", files);
+                }
+                if (this.options.autoProcessQueue) {
+                    return this.processQueue();
+                }
+            };
+
+            return Dropzone;
+
+        })(Emitter);
+
+        Dropzone.version = "4.2.0";
+
+        Dropzone.options = {};
+
+        Dropzone.optionsForElement = function(element) {
+            if (element.getAttribute("id")) {
+                return Dropzone.options[camelize(element.getAttribute("id"))];
+            } else {
+                return void 0;
+            }
+        };
+
+        Dropzone.instances = [];
+
+        Dropzone.forElement = function(element) {
+            if (typeof element === "string") {
+                element = document.querySelector(element);
+            }
+            if ((element != null ? element.dropzone : void 0) == null) {
+                throw new Error("No Dropzone found for given element. This is probably because you're trying to access it before Dropzone had the time to initialize. Use the `init` option to setup any additional observers on your Dropzone.");
+            }
+            return element.dropzone;
+        };
+
+        Dropzone.autoDiscover = true;
+
+        Dropzone.discover = function() {
+            var checkElements, dropzone, dropzones, _i, _len, _results;
+            if (document.querySelectorAll) {
+                dropzones = document.querySelectorAll(".dropzone");
+            } else {
+                dropzones = [];
+                checkElements = function(elements) {
+                    var el, _i, _len, _results;
+                    _results = [];
+                    for (_i = 0, _len = elements.length; _i < _len; _i++) {
+                        el = elements[_i];
+                        if (/(^| )dropzone($| )/.test(el.className)) {
+                            _results.push(dropzones.push(el));
+                        } else {
+                            _results.push(void 0);
+                        }
+                    }
+                    return _results;
+                };
+                checkElements(document.getElementsByTagName("div"));
+                checkElements(document.getElementsByTagName("form"));
+            }
+            _results = [];
+            for (_i = 0, _len = dropzones.length; _i < _len; _i++) {
+                dropzone = dropzones[_i];
+                if (Dropzone.optionsForElement(dropzone) !== false) {
+                    _results.push(new Dropzone(dropzone));
+                } else {
+                    _results.push(void 0);
+                }
+            }
+            return _results;
+        };
+
+        Dropzone.blacklistedBrowsers = [/opera.*Macintosh.*version\/12/i];
+
+        Dropzone.isBrowserSupported = function() {
+            var capableBrowser, regex, _i, _len, _ref;
+            capableBrowser = true;
+            if (window.File && window.FileReader && window.FileList && window.Blob && window.FormData && document.querySelector) {
+                if (!("classList" in document.createElement("a"))) {
+                    capableBrowser = false;
+                } else {
+                    _ref = Dropzone.blacklistedBrowsers;
+                    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                        regex = _ref[_i];
+                        if (regex.test(navigator.userAgent)) {
+                            capableBrowser = false;
+                            continue;
+                        }
+                    }
+                }
+            } else {
+                capableBrowser = false;
+            }
+            return capableBrowser;
+        };
+
+        without = function(list, rejectedItem) {
+            var item, _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = list.length; _i < _len; _i++) {
+                item = list[_i];
+                if (item !== rejectedItem) {
+                    _results.push(item);
+                }
+            }
+            return _results;
+        };
+
+        camelize = function(str) {
+            return str.replace(/[\-_](\w)/g, function(match) {
+                return match.charAt(1).toUpperCase();
+            });
+        };
+
+        Dropzone.createElement = function(string) {
+            var div;
+            div = document.createElement("div");
+            div.innerHTML = string;
+            return div.childNodes[0];
+        };
+
+        Dropzone.elementInside = function(element, container) {
+            if (element === container) {
+                return true;
+            }
+            while (element = element.parentNode) {
+                if (element === container) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        Dropzone.getElement = function(el, name) {
+            var element;
+            if (typeof el === "string") {
+                element = document.querySelector(el);
+            } else if (el.nodeType != null) {
+                element = el;
+            }
+            if (element == null) {
+                throw new Error("Invalid `" + name + "` option provided. Please provide a CSS selector or a plain HTML element.");
+            }
+            return element;
+        };
+
+        Dropzone.getElements = function(els, name) {
+            var e, el, elements, _i, _j, _len, _len1, _ref;
+            if (els instanceof Array) {
+                elements = [];
+                try {
+                    for (_i = 0, _len = els.length; _i < _len; _i++) {
+                        el = els[_i];
+                        elements.push(this.getElement(el, name));
+                    }
+                } catch (_error) {
+                    e = _error;
+                    elements = null;
+                }
+            } else if (typeof els === "string") {
+                elements = [];
+                _ref = document.querySelectorAll(els);
+                for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+                    el = _ref[_j];
+                    elements.push(el);
+                }
+            } else if (els.nodeType != null) {
+                elements = [els];
+            }
+            if (!((elements != null) && elements.length)) {
+                throw new Error("Invalid `" + name + "` option provided. Please provide a CSS selector, a plain HTML element or a list of those.");
+            }
+            return elements;
+        };
+
+        Dropzone.confirm = function(question, accepted, rejected) {
+            if (window.confirm(question)) {
+                return accepted();
+            } else if (rejected != null) {
+                return rejected();
+            }
+        };
+
+        Dropzone.isValidFile = function(file, acceptedFiles) {
+            var baseMimeType, mimeType, validType, _i, _len;
+            if (!acceptedFiles) {
+                return true;
+            }
+            acceptedFiles = acceptedFiles.split(",");
+            mimeType = file.type;
+            baseMimeType = mimeType.replace(/\/.*$/, "");
+            for (_i = 0, _len = acceptedFiles.length; _i < _len; _i++) {
+                validType = acceptedFiles[_i];
+                validType = validType.trim();
+                if (validType.charAt(0) === ".") {
+                    if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
+                        return true;
+                    }
+                } else if (/\/\*$/.test(validType)) {
+                    if (baseMimeType === validType.replace(/\/.*$/, "")) {
+                        return true;
+                    }
+                } else {
+                    if (mimeType === validType) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        if (typeof jQuery !== "undefined" && jQuery !== null) {
+            jQuery.fn.dropzone = function(options) {
+                return this.each(function() {
+                    return new Dropzone(this, options);
+                });
+            };
+        }
+
+        if (typeof module !== "undefined" && module !== null) {
+            module.exports = Dropzone;
+        } else {
+            window.Dropzone = Dropzone;
+        }
+
+        Dropzone.ADDED = "added";
+
+        Dropzone.QUEUED = "queued";
+
+        Dropzone.ACCEPTED = Dropzone.QUEUED;
+
+        Dropzone.UPLOADING = "uploading";
+
+        Dropzone.PROCESSING = Dropzone.UPLOADING;
+
+        Dropzone.CANCELED = "canceled";
+
+        Dropzone.ERROR = "error";
+
+        Dropzone.SUCCESS = "success";
+
+
+        /*
+
+         Bugfix for iOS 6 and 7
+         Source: http://stackoverflow.com/questions/11929099/html5-canvas-drawimage-ratio-bug-ios
+         based on the work of https://github.com/stomita/ios-imagefile-megapixel
+         */
+
+        detectVerticalSquash = function(img) {
+            var alpha, canvas, ctx, data, ey, ih, iw, py, ratio, sy;
+            iw = img.naturalWidth;
+            ih = img.naturalHeight;
+            canvas = document.createElement("canvas");
+            canvas.width = 1;
+            canvas.height = ih;
+            ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            data = ctx.getImageData(0, 0, 1, ih).data;
+            sy = 0;
+            ey = ih;
+            py = ih;
+            while (py > sy) {
+                alpha = data[(py - 1) * 4 + 3];
+                if (alpha === 0) {
+                    ey = py;
+                } else {
+                    sy = py;
+                }
+                py = (ey + sy) >> 1;
+            }
+            ratio = py / ih;
+            if (ratio === 0) {
+                return 1;
+            } else {
+                return ratio;
+            }
+        };
+
+        drawImageIOSFix = function(ctx, img, sx, sy, sw, sh, dx, dy, dw, dh) {
+            var vertSquashRatio;
+            vertSquashRatio = detectVerticalSquash(img);
+            return ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh / vertSquashRatio);
+        };
+
+
+        /*
+         * contentloaded.js
+         *
+         * Author: Diego Perini (diego.perini at gmail.com)
+         * Summary: cross-browser wrapper for DOMContentLoaded
+         * Updated: 20101020
+         * License: MIT
+         * Version: 1.2
+         *
+         * URL:
+         * http://javascript.nwbox.com/ContentLoaded/
+         * http://javascript.nwbox.com/ContentLoaded/MIT-LICENSE
+         */
+
+        contentLoaded = function(win, fn) {
+            var add, doc, done, init, poll, pre, rem, root, top;
+            done = false;
+            top = true;
+            doc = win.document;
+            root = doc.documentElement;
+            add = (doc.addEventListener ? "addEventListener" : "attachEvent");
+            rem = (doc.addEventListener ? "removeEventListener" : "detachEvent");
+            pre = (doc.addEventListener ? "" : "on");
+            init = function(e) {
+                if (e.type === "readystatechange" && doc.readyState !== "complete") {
+                    return;
+                }
+                (e.type === "load" ? win : doc)[rem](pre + e.type, init, false);
+                if (!done && (done = true)) {
+                    return fn.call(win, e.type || e);
+                }
+            };
+            poll = function() {
+                var e;
+                try {
+                    root.doScroll("left");
+                } catch (_error) {
+                    e = _error;
+                    setTimeout(poll, 50);
+                    return;
+                }
+                return init("poll");
+            };
+            if (doc.readyState !== "complete") {
+                if (doc.createEventObject && root.doScroll) {
+                    try {
+                        top = !win.frameElement;
+                    } catch (_error) {}
+                    if (top) {
+                        poll();
+                    }
+                }
+                doc[add](pre + "DOMContentLoaded", init, false);
+                doc[add](pre + "readystatechange", init, false);
+                return win[add](pre + "load", init, false);
+            }
+        };
+
+        Dropzone._autoDiscoverFunction = function() {
+            if (Dropzone.autoDiscover) {
+                return Dropzone.discover();
+            }
+        };
+
+        contentLoaded(window, Dropzone._autoDiscoverFunction);
+
+    }).call(this);
+};
+
+
+
+var slideplayer = {
+  ww: document.documentElement.clientWidth,
+  wh: document.documentElement.clientHeight,
+    main_page : document.location.pathname.toString() == '/',
+    is_mobile : navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|Opera Mini|IEMobile|Mobile/i),
+
+    common: {
+    
+    
+        window_reload : function() {
+            var width = $(window).width();
+            $(window).resize(function(){
+                if($(this).width() != width){
+                    waitForFinalEvent(function() {
+                        if (!window.screenTop && !window.screenY) {
+                            return;
+                        }
+
+                        // Safari
+                        if ($('#playerFrame').width() == screen.width) {
+                            return;
+                        }
+
+                        //document.location = document.location;
+                        //slideplayer.player.resize_player_frame();
+                        
+                    },  1000, "some unique string");
+                }
+            });
+        },
+
+        auth_dropdown_control : function() {
+            $(document).click(function() {
+                $('#user-dropdown').hide();
+            });
+
+            $('#user-nav').click(function(e) {
+                var shown = $('#user-dropdown:visible').length;
+                if (!shown) {
+                    $('#user-dropdown').show();
+                } else {
+                    $('#user-dropdown').hide();
+                }
+                e.stopPropagation();
+            });
+        },
+
+
+
+        header_auth_modal_control : function() {
+            // Функция авторизации через модальное окно (для всех страниц)
+            $('#modal-auth-form').submit(function(){
+                $('#modal-auth-error div').empty();
+                $('#modal-auth-error').hide();
+                if ($(this).is(':valid')) {
+                    var data = $('#modal-auth-form').serializeArray();
+                    $.post("/user/index/userlogin/", data, function(response) {
+                        try {
+                            var resp = JSON.parse(response);
+                        }catch(e) {
+                            $('#modal-auth-error div').append('<span class="uk-icon-exclamation uk-margin-small-right"></span>' + "Ошибка сервера").parent().show();
+                            return;
+                        }
+
+                        if (resp.hasOwnProperty('error')) {
+                            $('#modal-auth-error div').append('<span class="uk-icon-exclamation uk-margin-small-right"></span>' + resp.error).parent().show();
+
+                            if ($('#auth_recaptcha *').length < 1 && typeof(grecaptcha) == 'undefined') { // Нет рекапчи в модальном и не загружен скрипт рекапчи
+                                loadScript('//www.google.com/recaptcha/api.js?onload=setAuthModalRecap&render=explicit');
+                            } else if ($('#auth_recaptcha *').length < 1 && typeof(grecaptcha) != 'undefined') { // Скрипт гугла загружен, но нет капчи в модальном
+                                setAuthModalRecap();
+                            } else { // Скрипт и капча загружены, ресет капчи
+                                grecaptcha.reset($('#auth_recaptcha').attr('recap_id'));
+                            }
+                            $('#modal-auth-form input[type="password"]').val('');
+                        }
+
+                        if (resp.hasOwnProperty('success')) {
+                            window.location.href = resp.success;
+                        }
+                    })
+                }
+            })
+        },
+
+        show_header_user_name : function() {
+            if (getCookie != 'undefined' && getCookie('login')) {
+                    $('#user-nav-name').text(getCookie('login').split('+')[0].substr(0, 12));
+            }
+            // Кнопка войти или панель пользоватеня в хедере
+            if (getCookie != 'undefined' && getCookie('user_id') > 0){
+                $('#user-nav').css('display', 'inline-block');
+                $('#login-button').hide();
+            } else {
+                $('#login-button').css('opacity', '1');
+            }
+        },
+        // Перехода к авторизации/регистрации по клику иконки соц сети
+        set_social_auth_links : function() {
+            $('.social-icon').click(function() {
+                var provider = $(this).attr('provider'),
+                    link = '/user/index/socialauth/?provider=' + provider;
+                    if (provider == 'instagram') {
+                        link = '/user/index/socialauth/?p=i';
+                    }
+                document.location = link;
+            });
+        },
+        // Скрывает подложку слайдов у мобильных устройств
+        hide_thumb_layout: function () {
+            if (slideplayer.is_mobile) {
+                $('.uk-overlay-area').css('opacity', 0);
+            }
+        },
+    
+        search_switch: function () {
+            if (typeof (getCookie) != 'undefined' && getCookie('smode') == 'google') {
+                $('.search_form').attr('action', '/gsearch/');
+            }
+        },
+    
+        regRecapFn:        function () {
+            if ($('li.reg_mode.uk-active').length) {
+                setTimeout(function () {
+                    if ($('li.reg_mode.uk-active').length) {
+                        if (typeof (grecaptcha) == 'undefined') {
+                            loadScript('//www.google.com/recaptcha/api.js?onload=setRegRecap&render=explicit');
+                        } else if (typeof (grecaptcha) != 'undefined') {
+                            setRegRecap();
+                        }
+                    }
+                }, 1000);
+            }
+        },
+        fail_auth_control: function () {
+            $('#login-button').click(function () {
+                if (typeof (grecaptcha) == 'undefined') {
+                    loadScript('//www.google.com/recaptcha/api.js?onload=setAuthModalRecap&render=explicit');
+                } else if (typeof (grecaptcha) != 'undefined') {
+                    setAuthModalRecap();
+                }
+            });
+        
+            var loginRecapFn = function () {
+                if (typeof (grecaptcha) == 'undefined') {
+                    loadScript('//www.google.com/recaptcha/api.js?onload=setLoginRecap&render=explicit');
+                } else if (typeof (grecaptcha) != 'undefined') {
+                    setLoginRecap();
+                }
+            };
+            $('#auth_mode').click(function () {loginRecapFn()});
+        
+            if ($('#auth_mode').parent().hasClass('uk-active')) { loginRecapFn(); }
+        }
+    },
+
+    'search' : {
+        view_mode_control: function () {
+            //console.log('here');
+            if (typeof(getCookie) != 'undefined' && getCookie('view_mode') == 'grid') {
+                $('.search_form').append('<input type="hidden" name="view_mode" value="grid">');
+            }
+
+            $('li[smode]').click(function () {
+                setCookie('smode', $(this).attr('smode'));
+            });
+
+            // переключение между поисками
+            var search_form = $('#search_form');
+            $('.stype').click(function() {
+                var action = $(this).attr('stype');
+                search_form.attr('action', action);
+                search_form.submit();
+            });
+
+            // Управление видом серпа на странице поиска
+            if ($('.view-mode').length < 1) {
+                return;
+            }
+
+            $('.view-mode').click(function() {
+                var viewMode = $(this).attr('smode');
+                setCookie('view_mode', viewMode);
+
+
+                if (viewMode == 'list') {
+                    $('#view_mode').val('list');
+                    $('#search_page_form').submit();
+                }
+
+                if (viewMode == 'grid') {
+                    $('#view_mode').val('grid');
+                    $('#search_page_form').submit();
+                }
+            });
+
+            if (getCookie('view_mode') == 'grid') {
+                $('#view_mode').val('grid')
+            }
+
+        },
+
+        resize_thumbs :  function  () {
+            if ($(window).width() <= 1050) {
+                $('div.uk-overlay img').each(function() {
+                    $(this).css('height', $(this).width() / 1.329)
+                })
+            }
+        }
+    },
+
+    main : {
+        resize_thumbs : function() { // Ресайз тумб на главной странице
+            var thumb = $('.main-thumb .uk-overlay');
+            if ($(window).width() < 992) {
+                thumb.each(function () {
+                    $(this).css('height', $(this).width() / 1.3281);
+                });
+                return;
+            }
+            if (thumb.attr('style') != '') {
+                thumb.attr('style', '');
+            }
+        }
+    },
+
+    player : {
+        resize_player_frame : function(){
+            var frame               = $('#playerFrame'),
+                playerWrapper       = frame.closest('.playerWrapper'),
+                frameVideo          = $('#playerFrameVideo'),
+                ww                  = $(window).width(),
+                wh                  = $(window).height(),
+                height_with_padding = wh - 30,
+                player_block        = $('#player_block'),
+                player_margins      = parseInt($('#player_block').css('margin-right')) + parseInt($('#player_block').css('margin-left')),
+                left_ads_width      = $('.left-player-ads').width(),
+                right_ads_width     = $('.right-player-ads').width(),
+                is_mobile           = navigator.userAgent.match(/Android|BlackBerry|iPhone|iPod|Opera Mini|IEMobile|Mobile|PlayBook/i) && navigator.userAgent.match(/iPad/i) == null,
+                frame_width         = parseInt(frame.css('width')),
+                player_block_width  = parseInt(player_block.css('width'));
+    
+            var new_w,
+                is_left_ads      = 0,
+                is_right_ads     = 0,
+                k                = 1.3333,
+                nav_panel_height = is_mobile ? 0 : 49,
+                ads_selector     = '.ads';
+    
+            $('#video-tabs').show();
+            frameVideo.show();
+            
+    
+            if (typeof (service) !== 'undefined') {
+                ads_selector = '.' + service.mapper('ads') + '.' + service.mapper('ads_hidden');
+            }
+            if ($('.left-player-ads ' + ads_selector) && $('.left-player-ads ' + ads_selector).length < 2) {
+                is_left_ads = 1;
+            }
+            if ($('.right-player-ads ' + ads_selector) && $('.right-player-ads ' + ads_selector).length < 2) {
+                is_right_ads = 1;
+            }
+    
+    
+            var resize_height_problem = function(height, k) {
+                if (height > 600) {
+                    height = 600;
+                }
+
+                var new_width = height * k,
+                    new_height = height + nav_panel_height;
+
+                if (page_data.window_id == '12' && new_width < 728) {
+                    new_width = 728;
+                    new_height = (new_width / k) + nav_panel_height;
+                }
+
+                frame
+                    .css('width', new_width)
+                    .css('height', new_height)
+                    .css('opacity', '1');
+                playerWrapper
+                    .css('width', new_width)
+                    .css('height', '100%');
+                $('.slide-loader').hide();
+    
+                frameVideo.css('width', new_width)
+                    .css('height', new_height);
+            };
+            var resize_width_problem = function(width, k) {
+                var height = width / k;
+                if (height > 600 && wh > 600) {
+                    height = 600;
+                    width = (height * k) ;
+                }
+                if (page_data.window_id == '12' && width < 728) {
+                    width = 728;
+                    height = width / k;
+                }
+
+                frame
+                    .css('height', height + nav_panel_height)
+                    .css('width', width)
+                    .css('opacity', '1');
+                playerWrapper
+                    .css('width', width)
+                    .css('height', '100%');
+                $('.slide-loader').hide();
+    
+                frameVideo.css('height', height)
+                    .css('width', width);
+            };
+            // Присутствует реклама слева или справа
+            if (is_left_ads || is_right_ads) {
+                new_w = ww - player_margins - (left_ads_width + right_ads_width) - 10;
+                resize_width_problem(new_w, k);
+                //console.log('vetka 1');
+                if (frame.height() > wh) { // Плеер с рекламой не помещается по длине
+                    resize_height_problem(height_with_padding - nav_panel_height, k);
+                    //console.log('vetka 2')
+                }
+                return;
+            }
+            // Ширина экрана меньше высоты экрана (плеер на всю ширину)
+            if (ww < wh || frame_width > ww - player_margins) {
+                resize_width_problem(player_block_width, k);
+                //console.log('vetka 3');
+                return;
+            }
+            // Если плеер не помещается по высоте окна и нет рекламы
+            if (wh < ww) {
+                resize_height_problem(height_with_padding, k);
+                if (frame.width() > ww - player_margins) { // Плеер не помещается по ширине окна
+                    resize_width_problem(player_block_width, k);
+                }
+                //console.log('vetka 4');
+                return;
+            }
+        },
+
+        handle_iframe_parent_message : function() {
+            var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent",
+                eventer = window[eventMethod],
+                messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+            // Listen to message from child window
+            eventer(messageEvent,function(e) {
+                try {
+                    var resp = JSON.parse(e.data);
+                    if (resp.hasOwnProperty('small_slide')) {
+                        var height = resp.small_slide,
+                            frame_height = parseInt($('#playerFrame').css('height'));
+                        $('#playerFrame').css('height', frame_height - height + 2);
+                        //resize_frame();
+                    }
+                } catch (e) {
+
+                }
+            },false);
+        },
+
+        similars_with_ad_resize : function() {
+                var sidebar = $('.right-sidebar'),
+                    container = $('#body-block'),
+                    ww = $(window).width(),
+                    text_block = $('.left-container');
+                var src_right_block_width = sidebar.find('h3').eq(0).width(),
+                    src_right_sidebar_width = sidebar.width()+parseInt(sidebar.css('padding-left')),
+                    fluid_container_width = 0,
+                    new_sidebar_width = 0,
+                    new_container_width = 0,
+                    container_width = container.width(),
+                    text_block_padding = parseInt(text_block.css('padding-left')),
+                    text_block_width = text_block.width() - text_block_padding
+                    ;
+                var need_px = 0;
+
+                if (typeof (service) === 'undefined') {
+                    return;
+                }
+
+                $('.right-sidebar .'+service.mapper('ads')+':visible *').not('script').each(function() {
+
+                    var ad_width = $(this).width();
+                    var diff =  src_right_block_width - ad_width;
+                    //console.log('right block width: ' + src_right_block_width, 'ad width: ' + ad_width);
+
+                    if ( diff >= 0 ) {
+                        return;
+                    }
+
+                    diff*=-1; // to plus
+
+                    if (diff > need_px) {
+                        need_px = diff;
+                    }
+                });
+                $('.right-sidebar .'+service.mapper('ads')+':visible').not('script').each(function() {
+                    var ad_width = $(this).width(),
+                        diff =  src_right_block_width - ad_width;
+                    if ( diff >= 0 ) {
+                        return;
+                    }
+                    diff*=-1; // to plus
+                    if (diff > need_px) {
+                        need_px = diff;
+                    }
+                });
+                if (! need_px) {
+                    return;
+                }
+                new_sidebar_width = src_right_sidebar_width + need_px;
+                if (ww - container_width >= need_px) { // ширины окна достаточно для увеличения контентного блока
+
+                    new_container_width = container_width * 1 + need_px * 1;
+                    container.attr('style', 'max-width:' + new_container_width + 'px!important');
+                    text_block.css('width', text_block_width );
+                    sidebar.css('width', new_sidebar_width);
+                    return;
+                }
+                container.addClass('uk-container-fluid').removeClass('uk-container');
+                fluid_container_width = $('#body-block.uk-container-fluid').width();
+                text_block.css('width', fluid_container_width - new_sidebar_width + text_block_padding);
+                sidebar.css('width', new_sidebar_width);
+
+                //console.log('fluid container width: ' + fluid_container_width);
+        },
+
+        get_slide_views_count : function() {
+            var views_count = $('#views_count');
+            $.get(
+                '/slide/getviewscount/',
+                {'slide_id': views_count.data('slide_id')},
+                function (response) {
+                    try {
+                        data = JSON.parse(response);
+                        if (data.hasOwnProperty('total_views') && data['total_views'] !== null) {
+                            views_count.html(data['total_views']);
+                        } else {
+                            views_count.html('0');
+                        }
+                        $('.heading-block .uk-icon-eye').css('opacity', '1')
+                    } catch (error) {
+                        console.log(error);
+                        views_count.html(0);
+                        $('.heading-block .uk-icon-eye').css('opacity', '1')
+                    }
+                }
+            )
+        },
+
+        copy_embed_control : function() { // Копирование в буфер
+            $('#copyembed').click(function() {
+                $('#embed_input').select();
+                if (document.execCommand != 'undefined') {
+                    document.execCommand('copy');
+                }
+            });
+            $('#embed_input').click(function() {
+                $(this).select();
+            });
+
+            var get_embed = function() {
+
+                if ($('#embed:visible').length) {
+                    $('#embed').hide();
+                    return;
+                }
+                $('#embed').show();
+                var width = $('#playerFrame').width() || 800;
+                var height = $('#playerFrame').height() || 649;
+                var src = embed_template.replace('{width}', width);
+                var src = src.replace('{width}', width);
+                var src = src.replace('{width}', width);
+                var src = src.replace('{height}', height);
+                $('#embed_input').val(src);
+                $('#embed_input').select();
+            };
+
+            $('#get_embed').click(get_embed)
+        },
+
+        // Показываем блок похожих внизу и перемещаем часть през, которые не помещаются
+        move_similars : function() {
+            var ww = $(window).width();
+            if ($('.sidebar-item').length < 1) {
+                return;
+            }
+            var max_bottom_blocks = 24;
+    
+            var moveDown            = function () {
+                var top_bottomline = 0, obj_bottom_line = $('#bottom-line'), bottom_similar_obj = $('#bottom-similars');
+                if (!obj_bottom_line  || ! obj_bottom_line.offset || !obj_bottom_line.offset() || !obj_bottom_line.offset().top) {
+                    return;
+                }
+                top_bottomline = obj_bottom_line.offset().top;
+
+                $('.sidebar-item').each(function() {
+
+                    if (typeof $(this).offset == 'function') {
+                        var offset = $(this).offset();
+                    }
+
+                    if (typeof(offset) == 'undefined' || typeof($(this).height) != 'function' || !offset) {
+                        return;
+                    }
+                    if ((offset.top + $(this).height()) > top_bottomline) {
+                        var a = $(this).addClass('uk-width-1-4');
+                        bottom_similar_obj.append(a);
+                    }
+                });
+        
+                var lastBlock = $('.similar-sidebar .sidebar-item:has(*)').last();
+                if (typeof(lastBlock.offset) !== 'function') {return;}
+                
+                var additionalBlockHeight = top_bottomline - lastBlock.offset().top,
+                    additionalBlocks      = Math.ceil(additionalBlockHeight / lastBlock.height()) -2;
+                if (additionalBlocks <= 0) {return;}
+        
+                $('.similar-sidebar').append(moreSimilarSlides.slice(0, additionalBlocks));
+                moreSimilarSlides = moreSimilarSlides.slice(additionalBlocks);
+            };
+            var moveRight           = function () {
+                var similar_sidebar_obj = $('.similar-sidebar');
+                $('#bottom-similars .sidebar-item').each(function() {
+                    var b = $(this).removeClass('uk-width-1-4');
+                    similar_sidebar_obj.append(b);
+                });
+            };
+            var addMoreBlocksToDown = function () {
+                if (typeof ('moreSimilarSlides') === 'undefined') {
+                    return;
+                }
+        
+                var bottom_similar_obj = $('#bottom-similars'),
+                    block_at_bottom    = $('.sidebar-item', bottom_similar_obj).length,
+                    add_blocks_count   = Math.max(0, max_bottom_blocks - block_at_bottom),
+                    blocks             = moreSimilarSlides.slice(0, add_blocks_count);
+        
+                moreSimilarSlides = moreSimilarSlides.slice(add_blocks_count);
+        
+                bottom_similar_obj.append(blocks)
+                    .children('.sidebar-item').addClass('uk-width-1-4');
+            };
+            
+            if (ww > 800){
+                moveRight();
+                moveDown();
+                $('.sidebar-item').show();
+                addMoreBlocksToDown();
+            } else {
+                moveRight();
+            }
+
+            if ($('#bot-similar-bl .sidebar-item').length > 0) {
+                $('#bot-similar-bl').show();
+            } else {
+                $('#bot-similar-bl').hide();
+            }
+
+            slideplayer.player.resize_thumbs();
+
+        },
+
+        // Ресайз тумб на странице слайда
+        resize_thumbs : function() {
+            // Для сайдбара (похожие презентации)
+            if ($('.sidebar-item .uk-overlay').length > 0) {
+                $('.sidebar-item .uk-overlay').each(function () {
+                    $(this).css('height', $(this).parent().width() / 1.3295);
+                });
+                return;
+            }
+
+            if ($('.slide-item .uk-overlay').length > 0) {
+                $('.slide-item .uk-overlay').each(function () {
+                    $(this).css('height', $(this).width() / 1.3281);
+                });
+                return;
+            }
+        },
+
+        load_more_similars : function() {
+            var ww = $(window).width();
+            if (ww > 800) {
+                return;
+            }
+            $('#after_comment_similars > div').append($('.similar-sidebar .sidebar-item:lt(4)'));
+            $('#after_comment_similars .sidebar-item').fadeIn().parent().parent().show();
+            $('#load_more_btn').click(function() {
+                $('#after_comment_similars > div').append($('.similar-sidebar .sidebar-item:lt(4)'));
+                $('#after_comment_similars .sidebar-item').fadeIn();
+                $(window).scrollTop($(window).scrollTop()+1);
+
+                if ($('.similar-sidebar .sidebar-item').length == '0') {
+                    $('.similar-sidebar, #load_more_btn').remove();
+                }
+            })
+        },
+
+        load_social_likes_scripts : function() {
+//            return;
+//            loadScript('//connect.facebook.net/'+get_facebook_lang_js()+'/all.js#xfbml=1&appId=440132832763606', function() {
+//                setTimeout(function() {
+//                    slideplayer.player.move_similars();
+//                }, 1000);
+//            });
+//            loadScript('//platform.twitter.com/widgets.js');
+//            loadScript('//apis.google.com/js/plusone.js');
+
+
+
+            loadScript('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5266933f5ff1d9a0', function() {
+                if (typeof(addthis) == 'undefined') {
+                    $('#download-modal button[type="submit"]').removeAttr('disabled');
+                    return;
+                }
+
+                addthis.addEventListener('addthis.ready', function(evt){
+                    $('.addthis_toolbox').click(function(){
+                        setTimeout(function(){
+                            $('#download-modal button[type="submit"]').removeAttr('disabled')
+                        }, 3000);
+                    });
+                });
+
+                addthis.addEventListener('addthis.menu.share', function(evt) {
+                    if (evt.type == 'addthis.menu.share') {
+                        setTimeout(function(){
+                            $('#download-modal button[type="submit"]').removeAttr('disabled')
+                        }, 3000);
+                    }
+                });
+            });
+        },
+
+        show_social_shares : function() {
+//            return;
+            function show() {
+                var right_width = $('#get-code-btn').width(),
+                    block_width = $('#top_panel').width(),
+                    left_width = $('.addthis_counter').width() + parseInt($('.addthis_counter').css('padding-left')),
+                    free_width = block_width - right_width,
+                    icon_width,
+                    extra = 5;
+
+                $('#social-share .at300b').each(function() {
+                    icon_width = $(this).width() + parseInt($(this).css('padding-left')) + parseInt($(this).css('padding-right'));
+
+                    if (left_width + icon_width < free_width - extra) {
+                        //console.log(left_width, right_width, free_width, block_width);
+                        left_width += icon_width;
+                    } else {
+                        $(this).hide()
+                    }
+                });
+                $('#social-share').css({
+                    'opacity' : '1',
+                    'position' : 'inherit'
+                });
+            }
+
+            var check = setInterval(function() {
+                if ($('#social-share .at300b').width() != null && $('#social-share .at300b').width() > 0) {
+                    setTimeout(show, 2000);
+                    clearInterval(check);
+                }
+            }, 1000);
+
+            setTimeout(function() {
+                clearInterval(check);
+            }, 10000);
+    
+        },
+    
+        video_tabs_control: function () {
+            $('#video-tabs li a').click(function () {
+                var active = 'uk-active',
+                    tab    = $(this).attr('id');
+                $('#video-tabs li').removeClass(active);
+                $(this).parent().addClass(active);
+                $('.uk-switcher li').removeClass(active);
+                $('.' + tab).addClass(active);
+            
+                if (document.getElementById('playerFrameVideo')) {
+                    videojs("playerFrameVideo").ready(function () {this.pause();});
+                }
+                return false;
+            });
+        }
+    },
+
+    google_search : {
+
+        enable_search : function() {
+            if (typeof(page_data)!='undefined' && typeof(page_data.s)!='undefined' && page_data.s==1) {
+                return false;
+            }
+
+
+            var insert_thumb_image = function () {
+                if (!$('div.thumbWrapper').length) {
+                    return;
+                }
+
+                var idsArr = [];
+                $('.gsc-webResult.gsc-result').each(function () {
+                    var link = $(this).find('div.gs-bidi-start-align.gs-visibleUrl.gs-visibleUrl-long').first().text(),
+                        slide_id = link.replace(/^.*slideplayer.*slide\//i, '').replace('\/', '');
+                    idsArr.push(slide_id);
+                });
+
+                $.post('/gsearch/getnodeid/', {idsArr: idsArr}, function (data) {
+                    try {
+                        var data = JSON.parse(data);
+                        var domain = "//player." + document.domain.replace(/devalex./, '');
+                        $.each(data, function (id, node_id) {
+                            //console.log(id, 'node ' + node_id);
+                            $('.thumbWrapper[slide_id="' + id + '"] a').append('<img src="'+ domain + '/' + node_id + '/' + id + '/slides/slide_1.jpg"/>');
+                        });
+
+                        $('.thumbWrapper').parent().find('.gsc-table-result').css({
+                            'margin-left': '10px',
+                            'height': '100%'
+                        });
+
+                    } catch (e) {
+                        console.log(data)
+                    }
+                });
+
+            };
+
+            var make_thumbs = function (callback) {
+
+                $('.gsc-webResult.gsc-result').each(function () {
+
+                    var link = $(this).find('div.gs-bidi-start-align.gs-visibleUrl.gs-visibleUrl-long').first().text(),
+                        slide_id = link.replace(/^.*slideplayer.*slide\//i, '').replace('\/', ''),
+                        slide_url = $(this).find('a.gs-title').first().attr('href'),
+                        thumbWrapper = '<div slide_id="' + slide_id + '" class="thumbWrapper"><a target="_blank" href="' + slide_url + '"></a></div>';
+
+                    if (typeof slide_url === 'undefined') {
+                        return;
+                    }
+
+                    if ($(this).find('.thumbWrapper').length < 1 && $('.gs-no-results-result').length < 1) {
+
+                        $(this)
+                            .prepend(thumbWrapper);
+                        //.css({'margin-left': '0', 'height':'100%'});
+
+                        if (
+                            //link.match('player') != null ||
+                        link.match('theme') != null ||
+                        link.match(/\.\./) != null ||
+                        link.match('category') != null) {
+                            $(this).remove();
+                        } else {
+                            $(this).after('<hr class="uk-article-divider">');
+                        }
+                    }
+                });
+
+                if (callback) {
+                    callback();
+                }
+            };
+
+
+            var show_search = function () {
+                if (typeof(page_data)!='undefined' && typeof(page_data.s)!='undefined' && page_data.s==1) {
+                    return false;
+                }
+
+                var script = "<script> \
+                  (function() { \
+                      var cx = get_google_search_script(); \
+                      var gcse = document.createElement('script'); \
+                      gcse.type = 'text/javascript'; \
+                      gcse.async = true; \
+                      gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + \
+                      '//cse.google.com/cse.js?cx=' + cx; \
+                      var s = document.getElementsByTagName('script')[0]; \
+                      s.parentNode.insertBefore(gcse, s); \
+                  })(); \
+                  <\/script> \
+            <gcse:searchresults-only><\/gcse:searchresults-only>";
+
+                s_query = $('#search_query_top').val();
+
+                if ($('#___gcse_0').length == '0') {
+                    $('#google_search').html(script);
+                }
+
+                var startSearch = setInterval(function () {
+                    if ($('#___gcse_0').length) {
+
+                        start_hashing_pages();
+                        $(window).click();
+                        if (google.search.cse.element.getElement('gsearch') != null) {
+                            google.search.cse.element.getElement('gsearch').execute(s_query);
+                        }
+                        make_thumbs(insert_thumb_image);
+
+                        setTimeout(function () {
+                            $('.gsc-result:contains("Показаны результаты")').hide();
+                        }, 2000);
+
+                        $('.gs-spelling.gs-result a').click(function () {
+                            setTimeout(function () {
+                                make_thumbs(insert_thumb_image);
+                            }, 1500)
+                        });
+                        if ($('.gsc-webResult.gsc-result').find('.thumbWrapper').length > 0) {
+                            // Перейти на страницу гугл поиска, указанную в хеше
+                            var page = 1;
+                            if (document.location.hash.match(/^.*page(\d+)+$/)) {
+                                page = document.location.hash.match(/^.*page(\d+)+$/)[1];
+                            }
+                            if (page > 1) {
+                                $('.gsc-cursor-page').eq(page - 1).click();
+                                setTimeout(function () {
+                                    make_thumbs(insert_thumb_image)
+                                }, 1500);
+                            }
+                            $('.gcs-result:contains("Показаны результаты")').hide();
+                            clearInterval(startSearch);
+                        }
+                    }
+                }, 500);
+                setTimeout(function () {
+                    clearInterval(startSearch);
+                }, 10000);
+            };
+
+            var start_hashing_pages = function () {
+                $(window).click(function () {
+                    setTimeout(function () {
+                        $('.gsc-cursor-page').click(function () {
+                            window.location.hash = '#page' + $(this).text();
+
+                            setTimeout(function () {
+                                if (!$('div.thumbWrapper').length) {
+                                    make_thumbs(insert_thumb_image);
+                                }
+                            }, 2000);
+                            setTimeout(function () {
+                                $('.gsc-result:contains("Показаны результаты")').hide();
+                            }, 1000);
+                        });
+                    }, 1500);
+                });
+            };
+
+            start_hashing_pages();
+            show_search();
+
+        }
+    },
+
+    profile : {
+        support : {
+            abuse_form_control : function() {
+                var form = $('form#abuse'),
+                    error = $('#abuse-error span'),
+                    success = $('#abuse-success span'),
+                    recap = $('#send_abuse_recap');
+
+                form.submit(function() {
+                    $('.msg-alerts').hide();
+                    $.post('/support/sendabuse/', form.serializeArray(), function(response) {
+                        try {
+                            data = JSON.parse(response);
+                            grecaptcha.reset(recap.attr('recap_id'));  // Скрипт и капча загружены, ресет капчи
+                            if (data.hasOwnProperty('error')) {
+                                error.html(data.error).parent().show();
+                                return;
+                            }
+                            success.text(data.success).parent().show();
+                            document.getElementById("abuse").reset();
+
+                        } catch (e) {
+                            console.log(e)
+                        }
+                    })
+                });
+
+                $('#issue_type').change(function(){
+                    var val = $(this).val();
+                    if (val == 1) {
+                        $('#urls_block').show();
+                    } else {
+                        $('#urls_block').hide();
+                    }
+                });
+                if ($('#issue_type').val()==1) {
+                    $('#urls_block').show();
+                }
+
+
+                if (typeof(grecaptcha) == 'undefined') {
+                    loadScript('//www.google.com/recaptcha/api.js?onload=setSendAbuseRecap&render=explicit');
+                    return;
+                }
+                setSendAbuseRecap();
+            },
+            ccpa_form : function() {
+                if (typeof(grecaptcha) == 'undefined') {
+                    loadScript('//www.google.com/recaptcha/api.js?onload=setSendAbuseRecap&render=explicit');
+                    return;
+                }
+                setSendAbuseRecap();
+            }
+        },
+
+        account: {
+            profile_tabs_control : function() {
+                if ($('#profile_tabs li a').length < 1) {
+                    return;
+                }
+
+                $('#profile_tabs li a').click(function() {
+                    var active = 'uk-active',
+                        tab = $(this).attr('id');
+                    $('#profile_tabs li').removeClass(active);
+                    $(this).parent().addClass(active);
+                    $('.uk-switcher li').removeClass(active);
+                    $('.' + tab).addClass(active)
+                });
+            },
+            change_info_control : function() {
+                $('#change-name-form').submit(function() {
+                    var fn = $('#change-name-form input[name="first_name"]').val(),
+                        ln = $('#change-name-form input[name="last_name"]').val(),
+                        resp;
+                    $.post('/user/account/changeaccount/', {first_name: fn, last_name: ln}, function(response) {
+                        try {
+                            resp = JSON.parse(response);
+
+                            if (resp.hasOwnProperty('error')) {
+                                slideplayer.lib.show_notification(resp.error, 'error');
+                                return;
+                            }
+
+                            slideplayer.lib.show_notification(resp.success, 'success');
+                            $('#profile-name').text(fn + ' ' + ln);
+
+                        } catch (e) {
+                            console.log(response);
+                        }
+                    })
+                });
+
+                $('#change-pass-form').submit(function() {
+                    $('#change-pass-error').hide();
+
+                    $.post('/user/account/changepassword/', $('#change-pass-form').serializeArray(), function(response) {
+                        try {
+                            var resp = JSON.parse(response);
+                            if (resp.hasOwnProperty('error')) {
+                                $('#change-pass-error span').html("<i class='uk-icon-exclamation'></i> " + resp.error).parent().show();
+                                return;
+                            }
+                            slideplayer.lib.show_notification(resp.success, 'success');
+                            document.getElementById('change-pass-form').reset();
+                        } catch (e) {
+                            console.log(response)
+                        }
+                    })
+                });
+
+                if (document.getElementById('form-repeat-passwd')) {
+                    document.getElementById('form-repeat-passwd').addEventListener('input', function() {
+                        if (document.getElementById('form-repeat-passwd').value != document.getElementById('form-new-passwd').value) {
+                            document.getElementById('form-repeat-passwd').setCustomValidity(document.getElementById('pass-no-match').innerText);
+                        } else {
+                            document.getElementById('form-repeat-passwd').setCustomValidity('');
+                        }
+                    });
+                }
+            },
+        },
+
+        feedback : {
+            // Управление страницами с отзывами(сообщениями
+            user_feedback_control : function() {
+                $('#send_message_button').click(function(){ // /user/account/feedback/
+                    var form = $('#new_message_window');
+                    var recap = $('#new_msg_recap');
+                    var message = $('#new_message_window textarea[name="message"]').val();
+                    $.post('/user/account/newfeedback/',
+                        form.serializeArray(),
+                        function (response) {
+                            try {
+                                grecaptcha.reset(recap.attr('recap_id'));  // Скрипт и капча загружены, ресет капчи
+                                data = JSON.parse(response);
+                                if (data.hasOwnProperty('error')) {
+                                    $('#message-error').show();
+                                    $("#message-error span").text(data['error']);
+                                } else {
+                                    slideplayer.lib.show_notification(data.success, 'success');
+                                    $('#new_msg_blank h3 a').text(data.subject).attr('href', '/user/account/feedbackmessage/?id=' + data.message_id);
+                                    $('#new_msg_blank strong').text($('#profile-name').text().trim());
+                                    $('#new_msg_blank span.uk-margin-small-left').text(data.time);
+                                    $('#new_msg_blank p').text(message);
+                                    $('#new_msg_blank').slideDown();
+                                    $('#new_message_window').slideUp();
+                                    $('#no-msg-block').hide();
+                                }
+                            } catch (error) {
+                                console.log(error);
+                                //console.error(response);
+                            }
+                        }
+                    );
+                });
+
+                $('#send_reply_button').click(function(){ // /user/account/feedbackmessage
+                    var form = $('#new_message_window');
+                    var recap = $('#new_msg_recap');
+                    var message = $('#new_message_window textarea[name="message"]').val();
+                    var subject = $('.user-msg').eq(0).find('h3').text();
+                    $.post('/user/account/replayonfeedbackmessage/',
+                        form.serializeArray(),
+                        function (response) {
+                            try {
+                                grecaptcha.reset(recap.attr('recap_id'));  // Скрипт и капча загружены, ресет капчи
+                                data = JSON.parse(response);
+                                if (data.hasOwnProperty('error')) {
+                                    $('#message-error').show();
+                                    $('#message-error span').text(data['error']);
+                                } else {
+                                    slideplayer.lib.show_notification('Ваше сообщение успешно отправлено!', 'success');
+                                    $('#new_msg_blank h3').text('re:' + subject);
+                                    $('#new_msg_blank strong').text(data.user);
+                                    $('#new_msg_blank span.uk-margin-small-left').text(data.time);
+                                    $('#new_msg_blank p').text(message);
+                                    $('#new_msg_blank').slideDown();
+                                    $('#new_message_window').slideUp();
+                                }
+                            } catch (error) {
+                                console.error(response);
+                            }
+                        }
+                    );
+                });
+
+                $('#send_userabuse_reply').click(function(){ // /support/userabuse/
+                    var form = $('#new_message_window');
+                    var recap = $('#new_msg_recap');
+                    var message = $('#new_message_window textarea[name="message"]').val();
+
+                    $.post('/support/userreplyonmessage/',
+                        form.serializeArray(),
+                        function (response) {
+                            try {
+                                grecaptcha.reset(recap.attr('recap_id'));  // Скрипт и капча загружены, ресет капчи
+                                data = JSON.parse(response);
+                                if (data.hasOwnProperty('error')) {
+                                    $('#message-error span').html("<i class='uk-icon-exclamation'></i> "+ data.error +"").parent().show();
+                                } else {
+                                    slideplayer.lib.show_notification(data.success, 'success');
+                                    $('#new_msg_blank h3').text($('#reply_subject').text());
+                                    $('#new_msg_blank strong').text(data.user);
+                                    $('#new_msg_blank span.uk-margin-small-left').text(data.time);
+                                    $('#new_msg_blank p').text(message);
+                                    $('#new_msg_blank').slideDown();
+                                    $('#new_message_window').slideUp();
+                                }
+                            } catch (error) {
+                                console.error(response);
+                            }
+                        }
+                    );
+                });
+
+                $('#new_msg_btn').click(function() { // Открытие/закрытие формы отправки сообщения
+                    var recap = $('#new_msg_recap'),
+                        recap_empty = $('#new_msg_recap *').length < 1,
+                        script_not_loaded = typeof(grecaptcha) == 'undefined',
+                        script_loaded = typeof(grecaptcha) != 'undefined';
+
+                    if (recap_empty && script_not_loaded) { // Нет рекапчи в модальном и не загружен скрипт рекапчи
+                        loadScript('//www.google.com/recaptcha/api.js?onload=setNewMsgRecap&render=explicit');
+                        recap.attr('recap_id', '0');
+                    } else if (recap_empty && script_loaded) { // Скрипт гугла загружен, но нет капчи в модальном
+                        var recap_id = slideplayer.recaptcha.setNewMsgRecap();
+                        recap.attr('recap_id', recap_id);
+                    }
+                    $('#new_message_window').toggle(300);
+                });
+
+                $('#cancel_msg_btn').click(function() { // Закрытие формы отправки сообщения
+                    $('#new_message_window').fadeOut(300);
+                });
+            }
+        },
+
+        login : {
+
+            terms_link_insert : function() {
+                var terms_url = '/support/terms/',
+                    privacy_url = '/support/privacy/',
+                    terms = $('#terms_confirm a').eq(0),
+                    privacy = $('#terms_confirm a').eq(1);
+
+                if (! terms.length) {
+                    return;
+                }
+
+                terms.attr('href', terms_url);
+                privacy.attr('href', privacy_url);
+
+            },
+
+            login_tabs_control : function() {
+                if ($('#auth-tabs li a').length < 1) {
+                    slideplayer.common.regRecapFn();
+                    return;
+                }
+    
+                function showTab(tabId) {
+                    var active = 'uk-active';
+                    $('#auth-tabs li').removeClass(active);
+                    $('#' + tabId).parent().addClass(active);
+                    $('.uk-switcher li').removeClass(active);
+                    $('.' + tabId).addClass(active)
+                    slideplayer.common.regRecapFn();
+                }
+    
+                $('#auth-tabs li a').click(function () {
+                    showTab($(this).attr('id'));
+                });
+                
+                if (document.location.hash=="#login"){
+                    showTab('auth_mode');
+                    slideplayer.common.fail_auth_control();
+                }
+                
+                
+            },
+
+            user_auth_control : function() {
+                $('#register-form').submit(function(){
+                    $('#register-error div').empty();
+                    $('#register-error').hide();
+                    if ($(this).is(':valid')) {
+                        var data = $('#register-form').serializeArray(),
+                            errors;
+                        $.post("/user/index/registeruser/", data, function(response) {
+                            try { // Errors
+                                var resp = JSON.parse(response);
+                                if (resp.hasOwnProperty('error')) {
+                                    errors = resp.error;
+                                    if (typeof(errors) == 'string') {
+                                        $('#register-error div').append('<span class="uk-icon-exclamation uk-margin-small-right"></span>' + errors).parent().show();
+                                        return;
+                                    }
+                                    errors.forEach(function(error) {
+                                        $('#register-error div').append('<span class="uk-icon-exclamation uk-margin-small-right"></span>' + error + "<br />").parent().show();
+                                    });
+                                    return;
+                                }
+                                document.location = resp.success;
+                            } catch (e) {
+                                console.log(response)
+                            }
+                        })
+                    }
+                });
+
+                $('#login-form').submit(function(){
+                    $('#register-error div').empty();
+                    $('#register-error').hide();
+
+                    if ($(this).is(':valid')) {
+                        var data = $('#login-form').serializeArray();
+                        $.post("/user/index/userlogin/", data, function(response) {
+                            try {
+                                var resp = JSON.parse(response);
+
+                                if (resp.hasOwnProperty('error')) {
+                                    $('#register-error div').append('<span class="uk-icon-exclamation uk-margin-small-right"></span>' + resp.error).parent().show();
+                                    return;
+                                }
+
+                                document.location = resp.success;
+                            } catch (e) {
+                                $('#modal-auth-error div').append('<span class="uk-icon-exclamation uk-margin-small-right"></span>' + "Website error").parent().show();
+                                return;
+                            }
+                        })
+                    }
+                });
+            },
+
+            restore_pass_control : function() {
+                if (typeof(grecaptcha) == 'undefined') {
+                    loadScript('//www.google.com/recaptcha/api.js?onload=setRestoreRecap&render=explicit');
+                    return;
+                }
+                setRestoreRecap();
+            }
+        },
+
+        slides : {
+            user_slides_control : function() {  // Управление страницей с презентациями пользователя
+                $('.block-unblock').click(function() { // Блок/разблок презентации
+                    var slide_id = $(this).attr('slide_id'),
+                        status_text = $(this).parent().parent().parent().parent().find('.status-text'),
+                        slide_status = $(this).attr('slide_status'),
+                        target = slide_status==10?'unblockpresentation':'blockpresentation',
+                        action = '/user/slides/' + target,
+                        new_status_id = slide_status == '10'?'2':'10',
+                        new_btn_text = new_status_id == '10' ? $('#texts').attr('text_unblock') : $('#texts').attr('text_block');
+
+                    $.post(action, {slide_id : slide_id}, function(response) {
+                        try {
+                            var resp = JSON.parse(response);
+
+                            if (resp.hasOwnProperty('error')) {
+                                slideplayer.lib.show_notification(resp.error, 'error');
+                                return;
+                            }
+                            slideplayer.lib.show_notification(resp.success, 'success');
+                            $('.block-unblock[slide_id="' + slide_id + '"]').attr('slide_status', new_status_id);
+                            $('.block-unblock[slide_id="' + slide_id + '"]').text(new_btn_text);
+
+                            status_text.text(new_status_id == '10'?$('#blocked_text').text():$('#ok_text').text());
+                            new_status_id == '10'?
+                                status_text.addClass('uk-badge-danger'):
+                                status_text.addClass('uk-badge-success').removeClass('uk-badge-danger');
+
+                        } catch (e) {
+                            console.log(response);
+                        }
+
+                    });
+                });
+                $('.change-name-btn').click(function() { // Изменить названия презентации
+                    var id = $(this).attr('slide_id'),
+                        name = $(this).attr('slide_name');
+
+                    $('#change-name-window input[name=slide_id]').val(id);
+                    $('#change-name-window textarea[name=name]').text(name);
+                    $('#change-name-window textarea[name=name]').val(name);
+
+                });
+                $('#update-name').click(function() {  // Изменить названия презентации
+                    var name = $('#change-name-window textarea').val(),
+                        slide_id = $('#change-name-window input[name=slide_id]').val(),
+                        link_to_slide = $('.profile-slide a[name=slide_'+slide_id+'_name]'),
+                        newName;
+                    $.post('/user/slides/updateslidename/',
+                        { slide_id: slide_id, name: name },
+                        function (resp) {
+                            try {
+                                resp = JSON.parse(resp);
+                                if (resp.hasOwnProperty('error')) {
+                                    $('#change-name-window').modal('hide');
+                                    slideplayer.lib.show_notification(resp.error, 'error');
+                                    return;
+                                }
+
+                                link_to_slide.text(name);
+                                newName = link_to_slide.parent().parent().find('.change-name-btn').attr('slide_name', name);
+                                $('#change-name-window').modal('hide');
+                                slideplayer.lib.show_notification(resp.success, 'success');
+
+                            } catch (e) {
+                                console.log(resp)
+                            }
+                        }
+                    );
+                });
+                $('#upload-pres-btn').click(function() { // Открытие формы загрузки
+                    $('.upload-wrapper').toggle(200);
+                    if ($('#upload-drop').not(':visible')) {
+                        if (typeof (grecaptcha) == 'undefined') {
+                            loadScript('//www.google.com/recaptcha/api.js?onload=setUploadRecap&render=explicit');
+                        }
+                        var targetOffset = $('#upload-drop').offset().top;
+                        $('html,body').animate({scrollTop: targetOffset - 25}, 1000);
+                    }
+                });
+
+                $('.pres-settings > a')
+                    .mouseenter(function() {
+                        $(this).find('.uk-dropdown').show();})
+                    .mouseleave(function() {
+                        setTimeout(function () {
+                            if ($('.pres-settings:hover').length) {
+                                return;
+                            }
+                            $('.pres-settings .uk-dropdown').hide();
+                        }, 1500);
+                    });
+
+                $('#change-name-window .uk-modal-close').click(function() {
+                    $('#change-name-window').modal('hide');
+                });
+            }
+        },
+
+        remove_social_duplicates : function() {
+
+            // Удалить дубликаты добавленных социальных сетей
+            var added = [];
+            $('#linked-socials .sicon').each(function() {
+                // Удаляем дубликаты привязок (старые версии)
+                if ($.inArray($(this).attr('provider'), added) >= 0) {
+                    $(this).remove();
+                }
+                added.push($(this).attr('provider'))
+            });
+            $('#add-social-block .social-icon').each(function() {
+                if ($.inArray($(this).attr('provider'), added) >= 0) {
+                    $(this).remove();
+                }
+            });
+            $('#add-social-block, #linked-socials').removeClass('uk-hidden');
+        }
+},
+
+    download : {
+
+        resize_download_similars : function() {
+            setTimeout(function() {
+                $('#download_similars .uk-overlay img').each(function() {
+                    $(this).css('height', $(this).width() / 1.3333)
+                })
+            }, 500);
+        },
+
+        set_download_similars : function() {
+            var container_width = $('#download_similars_block').width(),
+                similars_block = $('#download_similars');
+            var left_ads = $('#left_similar_ads'),
+                right_ads = $('#right_similar_ads');
+            var left_ad_width = left_ads.width() + parseInt(left_ads.css('margin-right')),
+                right_ad_width = right_ads.width() + parseInt(right_ads.css('margin-left'));
+            var thumbs = $('#download_similars .similar-item'),
+                ww = $(window).width();
+
+            if (left_ads.width() > 0 || right_ads.width() > 0) {
+                similars_block.width(container_width - left_ad_width - right_ad_width - 1);
+            }
+
+
+            $('#load_all_btn').click(function() {
+                $('#download_similars .similar-item:hidden').fadeIn();
+                $('#download_similars').addClass('show_all');
+                $(window).scrollTop($(window).scrollTop()+1);
+                slideplayer.download.resize_download_similars();
+                $(this).hide();
+            });
+
+
+            if ($('#download_similars').hasClass('show_all')) {
+                return;
+            }
+
+            if (ww >= 1500) {
+                thumbs.hide().slice(0,8).show().parent().fadeIn();
+                return;
+            }
+            if (ww >= 1300 && ww < 1500) {
+                thumbs.hide().slice(0,6).show().parent().fadeIn();
+                return;
+            }
+
+            if (ww >= 1000 && ww < 1300) {
+                thumbs.hide().slice(0,4).show().parent().fadeIn();
+                return;
+            }
+
+            if (ww >= 600 && ww < 1000) {
+                thumbs.hide().slice(0,4).show().parent().fadeIn();
+                return;
+            }
+
+            if (ww < 600) {
+                thumbs.hide().slice(0,2).show().parent().fadeIn();
+                return;
+            }
+
+        },
+
+        set_download_timer : function(ppt_url) {
+
+            if (! ppt_url) {
+                return;
+            }
+
+            $('#download_block').hide();
+            $('#download_timer').show();
+
+            var count = 60,
+                counter = setInterval(timer, 1000);
+
+            function timer() {
+                count--;
+                if(count <= 0) {
+                    clearInterval(counter);
+                    $('#seconds').html(count);
+                    if (ppt_url && ppt_url.length && document.location.hostname.match(/dev/) == null) {
+                        if (ppt_url.match('player') == null) {
+                            ppt_url = 'http://player.' + document.location.hostname + ppt_url;
+                        }
+                        window.location.href = ppt_url;
+                    }
+                    $('#download-fail').show();
+                    $('#download-fail a').attr('href', ppt_url);
+                    $('#timer > div > h3').hide();
+                    return;
+                }
+                $('#seconds').html(count);
+            }
+        },
+
+        validate_download_recaptcha : function() {
+
+            $('#download_form').submit(function(){
+                $('#download_error').hide();
+                $.post('/slide/download-pres/', $('#download_form').serializeArray(), function(response) {
+                    try {
+                        var resp = JSON.parse(response);
+                        if (resp.hasOwnProperty('error')) {
+                            grecaptcha.reset($('#download_recaptcha').attr('recap_id'));
+                            $('#download_error').html("<i class='uk-icon-exclamation'></i> " + resp.error).show();
+                            return;
+                        }
+                        slideplayer.download.set_download_timer(resp.download_url);
+
+                    } catch (e) {
+                        console.log(response)
+                    }
+                })
+            });
+        }
+    },
+
+    lib : {
+
+        show_notification : function(text, type) {
+            var notify;
+            if ($('.uk-notify').length) {
+                $('.uk-notify').remove();
+            }
+            if (type == 'success') {
+                notify = '<div class="uk-notify uk-notify-top-right" style="display: none;"><div class="uk-notify-message uk-notify-message-success" style="opacity: 1; margin-top: 0px; margin-bottom: 10px;"><a class="uk-close"></a><div><i class="uk-icon-check"></i> ' + text + '</div></div></div>';
+            }
+            if (type == 'error') {
+                notify = '<div class="uk-notify uk-notify-top-right" style="display: none;"><div class="uk-notify-message uk-notify-message-danger" style="opacity: 1; margin-top: 0px; margin-bottom: 10px;"><a class="uk-close"></a><div><i class="uk-icon-exclamation"></i> ' + text + '</div></div></div>'
+            }
+    
+            $(notify).appendTo($('body')).fadeIn('medium');
+            setTimeout(function () {
+                $('.uk-notify').fadeOut();
+            }, 7000);
+    
+            $('.uk-notify').click(function () {
+                $(this).fadeOut();
+            })
+        },
+    
+        uploadZone:       undefined,
+        dropzone_control: function () {
+            if ($('#upload-drop').length < 1 || typeof (Dropzone) == 'undefined') {
+                return;
+            }
+        
+            slideplayer.lib.uploadZone = new Dropzone(document.getElementById('upload-drop'), {
+                url:                   "/user/slides/uploadpresentation/",
+                paramName:             "ppt_file",
+                createImageThumbnails: false,
+                previewTemplate:       '<div style="display:none"></div>',
+                clickable:             "#upload-drop button",
+                autoProcessQueue:      false
+            });
+        
+            var progressbar = $('#progressbar'),
+                bar         = progressbar.find('.uk-progress-bar');
+        
+            slideplayer.lib.uploadZone.on("complete", function (file) {
+                progressbar.hide();
+                if (document.location.pathname = '/') {
+                    document.location = '/user/slides/';
+                } else {
+                    document.location = document.location;
+                }
+            });
+        
+            slideplayer.lib.uploadZone.on("totaluploadprogress", function (percent) {
+                percent = Math.ceil(percent);
+                bar.css("width", percent + "%").text(percent + "%");
+            });
+        
+            slideplayer.lib.uploadZone.on("sending", function (file, xhr, formData) {
+                progressbar.removeClass('uk-hidden');
+                bar.css("width", "0%").text("0%")
+                formData.append('g-recaptcha-response',$('#g-recaptcha-response').val());
+            });
+        }
+
+    },
+
+    init_page_func : function(page) {
+        if (typeof(slideplayer[page]) == 'object') {
+            for (var func in slideplayer[page]) {
+                if (typeof(slideplayer[page][func]) == "function" && slideplayer[page].hasOwnProperty(func)) {
+                    slideplayer[page][func]();
+                }
+            }
+        }
+    },
+
+    init : function() {
+
+        slideplayer.init_page_func('common');
+
+        switch (page_data.page_id) {
+            case 2:
+                slideplayer.init_page_func('player');
+                break;
+            case 18:
+                slideplayer.init_page_func('download');
+                break;
+            case 12:
+            case 16:
+            case 5:
+                    slideplayer.init_page_func('search');
+                    slideplayer.init_page_func('google_search');
+                break;
+        }
+
+        var d = document.location.pathname.toString();
+
+        if (d.match('/user/') != null) {
+            slideplayer.profile.login.login_tabs_control();
+            slideplayer.profile.remove_social_duplicates();
+        }
+
+        if (d.match('/user/slides/') != null) {
+            slideplayer.profile.login.terms_link_insert();
+            slideplayer.profile.login.user_auth_control();
+            slideplayer.profile.slides.user_slides_control();
+            slideplayer.lib.dropzone_control();
+        }
+
+        if (d.match('/user/index/socialauth/') != null) {
+            slideplayer.profile.login.user_auth_control();
+            slideplayer.profile.login.terms_link_insert();
+        }
+
+        if (d.match('/support/feedback/') != null) {
+            slideplayer.profile.support.abuse_form_control();
+        }
+        
+        if (d.match('/support/ccpa/') != null) {
+            slideplayer.profile.support.ccpa_form();
+        }
+
+        if (d.match('/account/feedback') != null || d.match('userabuse') != null) {
+            slideplayer.profile.feedback.user_feedback_control();
+        }
+
+        if (d.match('/user/account/') != null) {
+            slideplayer.profile.account.change_info_control();
+            slideplayer.profile.account.profile_tabs_control();
+        }
+        if (d.match('/index/restorepassword/') != null) {
+            slideplayer.profile.login.restore_pass_control();
+        }
+        if (d.match('/slide/download/') != null) {
+            if (typeof(grecaptcha) == 'undefined') {
+                loadScript('//www.google.com/recaptcha/api.js?onload=setDownloadRecap&render=explicit');
+                return;
+            }
+            setDownloadRecap();
+        }
+
+
+        // Main Page
+        if (slideplayer.main_page) {
+            slideplayer.main.resize_thumbs();
+            slideplayer.player.resize_player_frame();
+            slideplayer.lib.dropzone_control();
+        }
+    }
+
+};
+
+var on_set_layout = function(callback) {
+
+    if (page_data.page_id == 2) {
+        slideplayer.player.resize_player_frame();
+        slideplayer.player.resize_thumbs();
+        //setTimeout(slideplayer.player.move_similars, 2000);
+    }
+
+    if (callback) {
+        callback()
+    }
+    
+};
+var on_load = function() {
+    switch (page_data.page_id) {
+        case 15:
+            slideplayer.player.move_similars();
+            slideplayer.player.resize_thumbs();
+            break;
+        case 16:
+        case 17:
+        case 19:
+            slideplayer.search.resize_thumbs();
+            break;
+    }
+
+    if (slideplayer.main_page) {
+        slideplayer.main.resize_thumbs()
+    }
+};
+
+var on_resize = function() {
+    switch (page_data.page_id) {
+        case 15:
+            slideplayer.player.move_similars();
+            slideplayer.player.resize_player_frame();
+            slideplayer.player.resize_thumbs();
+            break;
+        case 16:
+        case 17:
+        case 19:
+            slideplayer.search.resize_thumbs();
+            break;
+    }
+
+    if (slideplayer.main_page) {
+        slideplayer.main.resize_thumbs();
+        slideplayer.player.resize_player_frame();
+    }
+};
+
+
+var set_onload_events = function() {
+    $(document).ready(slideplayer.init);
+    $(window).load(on_load);
+    $(window).resize(on_resize);
+};
+
+
+var set_libs_and_run = function(){
+    if (typeof(load_lib_modals)!='undefined') {
+        load_lib_modals();
+    }
+
+    if (typeof(load_lib_dropzone)!='undefined') {
+        if (slideplayer.main_page || document.location.pathname.toString() == "/user/slides/") {
+            load_lib_dropzone();
+        }
+    }
+
+    if (typeof(set_onload_events)!='undefined') {
+        set_onload_events();
+    }
+
+
+
+    //if (typeof(load_lib_lazyload)!='undefined') {
+    //    try {
+    //        load_lib_lazyload();
+    //    } catch(e){window.onerror("library lazyload cant compile", '[system]');}
+    //}
+
+    if (typeof($)!= 'undefined' && typeof(viewport_detect) !='undefined') {
+        viewport_detect();
+    }
+
+    //if (typeof($)=='undefined' || typeof($.fn.lazyload)=='undefined') {
+    //    if (typeof(document.getElementsByClassName)!='undefined') {
+    //        var o, images = document.getElementsByClassName('lazy'), l;
+    //        if (typeof(images)!='undefined' && images && typeof(images.length)!='undefined') {
+    //            l = images.length;
+    //            for (var i=0; i<l; i++) {
+    //                o = images[i];
+    //                if (o.getAttribute('data-original')) {
+    //                    o.src = o.getAttribute('data-original');
+    //                }
+    //                if (typeof(o.style)!='undefined' && typeof(o.style.display)!='undefined') {
+    //                    o.style.display='block';
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+};
+
+var on_load_jquery = function() {
+    set_libs_and_run();
+
+    if (typeof(page_data) != 'undefined' && page_data.page_id == 2) {
+        var check_thumbs = function(){
+            if (! page_data.window_load) {
+                setTimeout(check_thumbs, 1000);
+                return;
+            }
+            var m = [], im;
+
+            $('img[src*="big_thumb"]').each(function(){
+                var o = $(this);
+                if (o.width() < 200 && this.complete) {
+                    m.push(this.src.toString().replace(/^.*\/(\d+)\/.*$/mig, '$1'));
+                }
+            });
+            if (m.length > 0) {
+                im = new Image();
+                im.src = '/badimages/?'+m.join('|')
+            }
+        };
+        check_thumbs();
+    }
+
+};eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('U Q=p(){1c(B.X){e\'2.K\':j=\'c-b-3\';d(\'f\',\'c-b-3\',\'2.K\');h;e\'2.J\':j=\'c-b-4\';d(\'f\',\'c-b-4\',\'2.J\');h;e\'2.M\':j=\'c-b-5\';d(\'f\',\'c-b-5\',\'2.M\');h;e\'2.I\':j=\'c-b-6\';d(\'f\',\'c-b-6\',\'2.I\');h;e\'2.L\':j=\'c-b-7\';d(\'f\',\'c-b-7\',\'2.L\');h;e\'2.k.N\':j=\'c-b-8\';d(\'f\',\'c-b-8\',\'2.k.N\');h;e\'2.O\':j=\'c-b-9\';d(\'f\',\'c-b-9\',\'2.O\');h;e\'2.P\':j=\'c-b-10\';d(\'f\',\'c-b-10\',\'2.P\');h;e\'2.G\':j=\'c-b-11\';d(\'f\',\'c-b-11\',\'2.G\');h;e\'2.y\':d(\'f\',\'c-b-12\',\'2.y\');h;e\'2.x\':d(\'f\',\'c-b-13\',\'2.x\');h;e\'2.H.w\':d(\'f\',\'c-b-14\',\'2.H.w\');h;e\'2.u\':d(\'f\',\'c-b-15\',\'2.u\');h;e\'2.v.z\':d(\'f\',\'c-b-16\',\'2.v.z\');h;e\'2.A\':d(\'f\',\'c-b-17\',\'2.A\');h;e\'2.F\':d(\'f\',\'c-b-18\',\'2.F\');h;e\'2.E\':d(\'f\',\'c-b-19\',\'2.E\');h;e\'2.k\':d(\'f\',\'c-b-1a\',\'2.k\');h;e\'2.C\':d(\'f\',\'c-b-1b\',\'n\');h;e\'2.1e\':d(\'f\',\'c-b-W\',\'n\');h;e\'t.k\':d(\'f\',\'c-b-S\',\'n\');h;e\'t.R\':d(\'f\',\'c-b-T\',\'n\');h;e\'t.C\':d(\'f\',\'c-b-1v\',\'n\');h;1u:1t 1s}d(\'1w\',\'1y\');d(\'1p\',\'1i\')};(p(i,s,o,g,r,a,m){i[\'1h\']=r;i[r]=i[r]||p(){(i[r].q=i[r].q||[]).1f(1j)},i[r].l=1*1n 1m();a=s.1l(o),m=s.1o(o)[0];a.1g=1;a.1x=g;a.1r=Q;m.1d.1q(a,m)})(1z,B,\'1k\',\'//Z.V-D.k/D.Y\',\'d\');',62,98,'||slideplayer|||||||||34773609|UA|ga|case|create||break||analitics_id|com|||auto||function||||slidesplayer|nl|biz|th|se|fi|tr|no|document|org|analytics|gr|dk|hu|in|es|fr|de|pl|it|br|id|cz|set_ga_counters|net|44|45|var|google|22|domain|js|www|||||||||||20|21|switch|parentNode|info|push|async|GoogleAnalyticsObject|pageview|arguments|script|createElement|Date|new|getElementsByTagName|send|insertBefore|onload|false|return|default|46|require|src|displayfeatures|window'.split('|'),0,{}));
